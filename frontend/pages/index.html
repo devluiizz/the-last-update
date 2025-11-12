@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Last Update é o blog de jogos com notícias rápidas, análises, reviews, guias e novidades de tecnologia — tudo sobre a cultura pop e cultura gamer.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.thelastupdate.com.br/">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="apple-touch-icon" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Last Update">
+  <meta property="og:title" content="The Last Update | Seu blog favorito da cultura gamer">
+  <meta property="og:description" content="The Last Update é o blog de jogos com notícias rápidas, análises, reviews, guias e novidades de tecnologia — tudo sobre a cultura pop e cultura gamer.">
+  <meta property="og:url" content="https://www.thelastupdate.com.br/">
+  <meta property="og:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Last Update | Seu blog favorito da cultura gamer">
+  <meta name="twitter:description" content="The Last Update é o blog de jogos com notícias rápidas, análises, reviews, guias e novidades de tecnologia — tudo sobre a cultura pop e cultura gamer.">
+  <meta name="twitter:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/home.css">
+  <script defer src="../assets/js/lib/include.js"></script>
+  <script defer src="../assets/js/pages/header.js"></script>
+  <script defer src="../assets/js/lib/utils.js"></script>
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.thelastupdate.com.br/#website",
+          "url": "https://www.thelastupdate.com.br/",
+          "name": "The Last Update",
+          "inLanguage": "pt-BR",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://www.thelastupdate.com.br/busca?termo={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "NewsMediaOrganization",
+          "@id": "https://www.thelastupdate.com.br/#organization",
+          "name": "The Last Update",
+          "url": "https://www.thelastupdate.com.br/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.thelastupdate.com.br/assets/img/logo/tlu-logo.svg"
+          }
+        },
+        {
+          "@type": "ItemList",
+          "name": "Site Navigation",
+          "itemListElement": [
+            {
+              "@type": "SiteNavigationElement",
+              "position": 1,
+              "name": "Quem Somos",
+              "url": "https://www.thelastupdate.com.br/quemsomos"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 2,
+              "name": "Política de Privacidade",
+              "url": "https://www.thelastupdate.com.br/politica-de-privacidade"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 3,
+              "name": "Condições de Uso",
+              "url": "https://www.thelastupdate.com.br/condicoes-de-uso"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 4,
+              "name": "Área do Jornalista",
+              "url": "https://www.thelastupdate.com.br/login"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
+  <title>The Last Update | Seu blog favorito da cultura gamer</title>
+</head>
+
+<body>
+
+  <div data-include="../partials/header.html"></div>
+
+  <main class="container">
+
+    <section id="featured" class="featured" aria-labelledby="featured-title">
+
+      <h1 class="featured-title">Notícias do momento</h1>
+
+      <div class="featured-slider-hint" aria-hidden="true">
+        <span class="featured-slider-hint__text">Arraste</span>
+        <div class="featured-slider-hint__arrows" aria-hidden="true">
+          <span class="featured-slider-hint__arrow featured-slider-hint__arrow--left">←</span>
+          <span class="featured-slider-hint__arrow featured-slider-hint__arrow--right">→</span>
+        </div>
+      </div>
+
+      <div class="featured-grid" data-component="featured">
+        <div class="featured-column featured-column--left">
+
+          <article id="card-main" class="card card--main" data-slot="main" data-article-id="" data-category="">
+            <div class="card__category" data-field="category"></div>
+
+            <img class="card__image" data-field="image" alt="" loading="lazy" />
+
+            <header class="card__header">
+              <h4 class="card__title" data-field="titleLink"></h4>
+
+              <div class="card__meta">
+                <div class="card__author">
+                  <img class="card__author-avatar" data-field="authorAvatar" alt="" loading="lazy" />
+                  <p class="btn-sm"> <span class="card__author-writer">Escrito por:</span> <span class="card__author-name box-grad" data-field="authorName"></span></p>
+                </div>
+                <time class="card__date btn-sm" data-field="date" datetime=""></time>
+              </div>
+            </header>
+
+            <p class="card__excerpt" data-field="excerpt"></p>
+
+            <a class="card__cta btn-md" data-field="cta" href="#">
+              <span class="card__cta-label">Continue Lendo</span>
+              <span class="card__cta-icon" aria-hidden="true">
+                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                  <path d="M19.4411 4.76801C17.5437 2.9865 15.0378 1.99645 12.4351 2.00001C6.77412 2.00001 2.18512 6.58901 2.18512 12.25C2.18512 17.911 6.77412 22.5 12.4351 22.5C15.1322 22.5038 17.7213 21.4409 19.6376 19.543L12.1851 12L19.4411 4.76801Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M20.1851 14C20.7156 14 21.2243 13.7893 21.5993 13.4142C21.9744 13.0391 22.1851 12.5304 22.1851 12C22.1851 11.4696 21.9744 10.9609 21.5993 10.5858C21.2243 10.2107 20.7156 10 20.1851 10C19.6547 10 19.146 10.2107 18.7709 10.5858C18.3958 10.9609 18.1851 11.4696 18.1851 12C18.1851 12.5304 18.3958 13.0391 18.7709 13.4142C19.146 13.7893 19.6547 14 20.1851 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M8.68512 6.5V10.5M6.68512 8.5H10.6851" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+
+          </article>
+
+
+          <article id="card-video" class="card card--video" data-slot="video" data-video-id="">
+            <div class="card__category">Vídeo do Canal</div>
+
+            <a class="card__image" data-field="videoLink" href="#" target="_blank" rel="noopener">
+              <img data-field="videoThumb" alt="" loading="lazy" />
+              <span class="card__play" aria-hidden="true">▶</span>
+            </a>
+
+            <h6 class="card__title card__title__video" data-field="videoTitle"></h6>
+
+          </article>
+        </div>
+
+        <div class="featured-column featured-column--right">
+
+          <article id="card-right-1" class="card card--size" data-slot="rightTop" data-article-id="" data-category="">
+            <div class="card__category" data-field="category"></div>
+
+            <img class="card__image" data-field="image" alt="" loading="lazy" />
+
+            <header class="card__header">
+              <h6 class="card__title" data-field="titleLink"></h6>
+
+              <div class="card__meta">
+                <div class="card__author">
+                  <img class="card__author-avatar" data-field="authorAvatar" alt="" loading="lazy" />
+                  <p class="btn-sm"><span class="card__author-writer">Escrito por:</span> <span class="card__author-name box-grad" data-field="authorName"></span></p>
+                </div>
+                <time class="card__date btn-sm" data-field="date" datetime=""></time>
+              </div>
+            </header>
+
+            <p class="card__excerpt" data-field="excerpt"></p>
+
+            <a class="card__cta btn-md" data-field="cta" href="#">
+              <span class="card__cta-label">Continue Lendo</span>
+              <span class="card__cta-icon" aria-hidden="true">
+                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                  <path d="M19.4411 4.76801C17.5437 2.9865 15.0378 1.99645 12.4351 2.00001C6.77412 2.00001 2.18512 6.58901 2.18512 12.25C2.18512 17.911 6.77412 22.5 12.4351 22.5C15.1322 22.5038 17.7213 21.4409 19.6376 19.543L12.1851 12L19.4411 4.76801Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M20.1851 14C20.7156 14 21.2243 13.7893 21.5993 13.4142C21.9744 13.0391 22.1851 12.5304 22.1851 12C22.1851 11.4696 21.9744 10.9609 21.5993 10.5858C21.2243 10.2107 20.7156 10 20.1851 10C19.6547 10 19.146 10.2107 18.7709 10.5858C18.3958 10.9609 18.1851 11.4696 18.1851 12C18.1851 12.5304 18.3958 13.0391 18.7709 13.4142C19.146 13.7893 19.6547 14 20.1851 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M8.68512 6.5V10.5M6.68512 8.5H10.6851" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+
+          </article>
+
+
+          <article id="card-right-2" class="card card--size" data-slot="rightBottom" data-article-id="" data-category="">
+            <div class="card__category" data-field="category"></div>
+
+            <img class="card__image" data-field="image" alt="" loading="lazy" />
+
+            <header class="card__header">
+              <h6 class="card__title" data-field="titleLink"></h6>
+
+              <div class="card__meta">
+                <div class="card__author">
+                  <img class="card__author-avatar" data-field="authorAvatar" alt="" loading="lazy" />
+                  <p class="btn-sm"><span class="card__author-writer">Escrito por:</span> <span class="card__author-name box-grad" data-field="authorName"></span></p>
+                </div>
+                <time class="card__date btn-sm" data-field="date" datetime=""></time>
+              </div>
+            </header>
+
+            <p class="card__excerpt" data-field="excerpt"></p>
+
+            <a class="card__cta btn-md" data-field="cta" href="#">
+              <span class="card__cta-label">Continue Lendo</span>
+              <span class="card__cta-icon" aria-hidden="true">
+                <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                  <path d="M19.4411 4.76801C17.5437 2.9865 15.0378 1.99645 12.4351 2.00001C6.77412 2.00001 2.18512 6.58901 2.18512 12.25C2.18512 17.911 6.77412 22.5 12.4351 22.5C15.1322 22.5038 17.7213 21.4409 19.6376 19.543L12.1851 12L19.4411 4.76801Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M20.1851 14C20.7156 14 21.2243 13.7893 21.5993 13.4142C21.9744 13.0391 22.1851 12.5304 22.1851 12C22.1851 11.4696 21.9744 10.9609 21.5993 10.5858C21.2243 10.2107 20.7156 10 20.1851 10C19.6547 10 19.146 10.2107 18.7709 10.5858C18.3958 10.9609 18.1851 11.4696 18.1851 12C18.1851 12.5304 18.3958 13.0391 18.7709 13.4142C19.146 13.7893 19.6547 14 20.1851 14Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+                  <path d="M8.68512 6.5V10.5M6.68512 8.5H10.6851" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </span>
+            </a>
+
+          </article>
+        </div>
+
+      </div>
+
+
+    </section>
+
+    <section id="latest" class="latest" aria-labelledby="latest-title">
+
+      <h1 class="latest__title">Últimas Notícias</h1>
+      <header class="latest__header">
+
+        <nav class="latest__tabs btn-lg" aria-label="Categorias">
+          <button class="tab" data-cat="all" aria-controls="latest-grid" aria-selected="true">Todas as Notícias</button>
+          <button class="tab" data-cat="games" aria-controls="latest-grid">Games</button>
+          <button class="tab" data-cat="mundo-tech" aria-controls="latest-grid">Mundo Tech</button>
+          <button class="tab" data-cat="cultura-pop" aria-controls="latest-grid">Cultura Pop</button>
+          <button class="tab" data-cat="videos" aria-controls="latest-grid">Vídeos</button>
+        </nav>
+
+        <form class="latest__search" role="search" aria-label="Buscar Notícias" onsubmit="return false;">
+
+          <div class="search-wrap btn-md latest__search-wrap">
+            <span class="search-icon" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.3333 21.3333L25.3333 25.3333M21.3333 14C21.3333 18.0501 18.05 21.3333 14 21.3333C9.94987 21.3333 6.66663 18.0501 6.66663 14C6.66663 9.94991 9.94987 6.66667 14 6.66667C18.05 6.66667 21.3333 9.94991 21.3333 14Z" stroke="var(--color-text-primary)" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </span>
+            <input id="latest-search" class="search-input" name="q" type="search" placeholder="Buscar Notícias" autocomplete="off" />
+          </div>
+        </form>
+      </header>
+
+      <div class="latest__filters" aria-label="Filtros Adicionais">
+        <div class="latest__sort">
+          <label for="latest-sort">Ordenar por:</label>
+          <select name="sort" id="latest-sort">
+            <option value="recent">Mais recente</option>
+            <option value="oldest">Mais antiga</option>
+            <option value="views">Mais visualizadas</option>
+          </select>
+        </div>
+
+        <fieldset id="latest-subfilter" class="latest__subfilter" hidden>
+          <legend>Refinar Cultura Pop</legend>
+          <label class="btn-sm"><input type="radio" name="cp-sub" value="all" checked /> Tudo</label>
+          <label class="btn-sm"><input type="radio" name="cp-sub" value="filmes" /> Filmes</label>
+          <label class="btn-sm"><input type="radio" name="cp-sub" value="nerd" /> Nerd</label>
+          <label class="btn-sm"><input type="radio" name="cp-sub" value="series" /> Séries</label>
+        </fieldset>
+      </div>
+
+      <div id="latest-grid" class="latest__grid latest__grid--animated" data-component="latest-grid" aria-live="polite"></div>
+
+      <div class="latest__footer">
+        <p id="latest-counter" class="latest__counter" aria-live="polite" hidden></p>
+        <button id="latest-load-more" class="btn-lg btn--more btn--more--floating" type="button" aria-controls="latest-grid">
+          Carregar mais
+        </button>
+      </div>
+
+    </section>
+
+    <!-- Modal de Solicitação de Notificações Push -->
+    <div class="notification-alert" id="notificationModal" hidden>
+      <div class="notification-alert__overlay"></div>
+      <div class="notification-alert__dialog" role="dialog" aria-modal="true" aria-labelledby="notificationAlertTitle">
+        <div class="notification-alert__icon" aria-hidden="true">
+          <!-- Ícone reutilizado do modal de troca de senha -->
+          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23.0496 6.34165C23.675 5.24891 24.325 5.24891 24.9504 6.34165L42.4388 36.415C43.0642 37.5077 42.5513 38.4 41.3484 38.4H6.65157C5.44868 38.4 4.93577 37.5077 5.56117 36.415L23.0496 6.34165ZM24 29.2C23.115 29.2 22.4 29.915 22.4 30.8C22.4 31.685 23.115 32.4 24 32.4C24.885 32.4 25.6 31.685 25.6 30.8C25.6 29.915 24.885 29.2 24 29.2ZM22.8 18.4V26.8H25.2V18.4H22.8Z" fill="currentColor" />
+          </svg>
+        </div>
+        <h2 class="notification-alert__title" id="notificationAlertTitle">Deseja receber nossas notificações?</h2>
+        <p class="notification-alert__text">Sua atenção é muito importante para nós! Fique por dentro das últimas publicações com notificações personalizadas diretamente no seu dispositivo.</p>
+        <p class="notification-alert__links">
+          <a href="/politicas" target="_self">Política de Privacidade</a>
+          &nbsp;&middot;&nbsp;
+          <a href="/condicoes" target="_self">Termos de Uso</a>
+        </p>
+        <div class="notification-alert__actions">
+          <button type="button" class="btn-lg notification-alert__primary" data-notification-action="accept">Aceitar</button>
+          <button type="button" class="btn-lg notification-alert__secondary" data-notification-action="deny">Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="cookie-banner" class="cookie-banner" hidden>
+    <p class="cookie-banner__text">
+      Este site utiliza cookies para melhorar sua experiência. Leia as nossas
+      <a href="/condicoes" class="cookie-banner__link">condições de uso</a>.
+    </p>
+    <div class="cookie-banner__actions">
+      <button class="btn-sm cookie-banner__btn" data-cookie-action="accept">
+        Aceitar
+      </button>
+      <button class="btn-sm cookie-banner__btn cookie-banner__btn--secondary" data-cookie-action="deny">
+        Recusar
+      </button>
+    </div>
+  </div>
+
+  <div data-include="../partials/footer.html"></div>
+
+  <script type="module" src="../assets/js/pages/home.js"></script>
+  <script type="module" src="../assets/js/push/push-client.js"></script>
+
+</body>
+
+</html>

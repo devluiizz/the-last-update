@@ -1,0 +1,6 @@
+{
+  "watch": ["src"],
+  "ext": "js,json,sql",
+  "ignore": ["src/db/sqlite/*.sqlite", "node_modules"],
+  "exec": "node src/server.js"
+}

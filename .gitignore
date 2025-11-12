@@ -1,0 +1,21 @@
+# Node.js dependencies and build artifacts
+backend/node_modules/
+backend/backups
+
+# Environment and configuration
+.env
+
+# Database and backup files
+backend/src/db/sqlite/database.sqlite
+backend/src/db/sqlite/database.sqlite-shm
+backend/src/db/sqlite/database.sqlite-wal
+
+backend/uploads
+backend/src/storage/avatars
+
+# OS/Editor generated filessrc
+.DS_Store
+Thumbs.db
+
+temp_patch_members.js
+backend/scripts/preencherBanco.js

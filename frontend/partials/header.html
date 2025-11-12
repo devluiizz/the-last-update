@@ -1,0 +1,62 @@
+﻿<header class="header-bg">
+  <div class="header container">
+    <a href="/" class="header-logo"><img class="tlu-logo-text" src="../assets/img/logo/tlu-logo-text.svg" data-dark="../assets/img/logo/tlu-logo-text.svg" data-light="../assets/img/logo/tlu-logo-text-dark.svg" alt="Logo The Last Update"></a>
+
+    <div class="header-center">
+      <nav class="header-nav btn-md" id="header-menu" aria-label="Seções">
+        <div class="header-nav__inner" id="header-menu-list">
+          <a class="header-tab" href="/#ultimas?cat=games" data-cat="games">Games</a>
+          <a class="header-tab" href="/#ultimas?cat=mundo-tech" data-cat="mundo-tech">Mundo Tech</a>
+
+          <div class="menu-item has-submenu">
+            <button class="submenu-btn" type="button" aria-haspopup="menu" aria-expanded="false">
+              Cultura Pop
+              <span class="caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="submenu" role="menu">
+              <a role="menuitem" href="/#ultimas?cat=cultura-pop&sub=filmes" data-cat="cultura-pop" data-sub="filmes">Filmes</a>
+              <a role="menuitem" href="/#ultimas?cat=cultura-pop&sub=series" data-cat="cultura-pop" data-sub="series">Séries</a>
+              <a role="menuitem" href="/#ultimas?cat=cultura-pop&sub=nerd" data-cat="cultura-pop" data-sub="nerd">Nerd</a>
+            </div>
+          </div>
+
+          <a class="header-tab" href="/quemsomos">Quem Somos?</a>
+        </div>
+      </nav>
+
+      <div class="header-search">
+        <div class="search-wrap btn-md" data-search>
+          <span class="search-icon" aria-hidden="true">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.3333 21.3333L25.3333 25.3333M21.3333 14C21.3333 18.0501 18.05 21.3333 14 21.3333C9.94987 21.3333 6.66663 18.0501 6.66663 14C6.66663 9.94991 9.94987 6.66667 14 6.66667C18.05 6.66667 21.3333 9.94991 21.3333 14Z" stroke="var(--color-text-primary)" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+          </span>
+          <input type="search" class="search-input" name="q" id="search-bar" placeholder="Buscar notícias..." autocomplete="off" aria-label="Buscar notícias">
+          <div id="search-suggestions" class="search-suggestions" role="listbox" hidden></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="icon-btn header-menu-toggle" type="button" data-action="toggle-menu" aria-label="Abrir menu" aria-haspopup="true" aria-expanded="false" aria-controls="header-menu">
+        <span class="header-menu-toggle__icon" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+      </button>
+
+      <button class="icon-btn theme-toggle" data-action="toggle-theme" aria-pressed="false" aria-label="Alternar tema">
+        <svg width="52" height="24" viewBox="0 0 52 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="52" height="24" rx="12" fill="#333333" />
+          <rect width="24" height="24" rx="12" fill="white" />
+          <path opacity="0.3" d="M9.37 5.51C9.18999 6.15798 9.09916 6.82748 9.1 7.5C9.1 11.58 12.42 14.9 16.5 14.9C17.18 14.9 17.85 14.81 18.49 14.63C17.9652 15.921 17.0674 17.0263 15.9114 17.8047C14.7554 18.5831 13.3936 18.9992 12 19C8.14 19 5 15.86 5 12C5 9.07 6.81 6.55 9.37 5.51Z" fill="black" />
+          <path d="M9.37 5.51C9.19 6.15798 9.09916 6.82748 9.1 7.5C9.1 11.58 12.42 14.9 16.5 14.9C17.18 14.9 17.85 14.81 18.49 14.63C17.9652 15.921 17.0674 17.0263 15.9114 17.8047C14.7554 18.5831 13.3936 18.9992 12 19C8.14 19 5 15.86 5 12C5 9.07 6.81 6.55 9.37 5.51ZM12 3C10.22 3 8.47991 3.52784 6.99987 4.51677C5.51983 5.50571 4.36628 6.91131 3.68509 8.55585C3.0039 10.2004 2.82567 12.01 3.17294 13.7558C3.5202 15.5016 4.37737 17.1053 5.63604 18.364C6.89472 19.6226 8.49836 20.4798 10.2442 20.8271C11.99 21.1743 13.7996 20.9961 15.4442 20.3149C17.0887 19.6337 18.4943 18.4802 19.4832 17.0001C20.4722 15.5201 21 13.78 21 12C21 11.54 20.96 11.08 20.9 10.64C20.4003 11.3406 19.7401 11.9114 18.9746 12.3045C18.2091 12.6977 17.3606 12.9019 16.5 12.9C15.3552 12.9 14.24 12.5364 13.3152 11.8617C12.3904 11.1869 11.7038 10.2358 11.3545 9.14561C11.0052 8.05541 11.0112 6.88243 11.3717 5.79586C11.7321 4.70928 12.4284 3.76528 13.36 3.1C12.92 3.04 12.46 3 12 3Z" fill="black" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="header-nav__backdrop" data-menu-backdrop></div>
+  <div id="search-backdrop" class="search-backdrop" hidden></div>
+</header>

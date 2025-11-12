@@ -1,0 +1,181 @@
+#progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background-color: var(--color-primary01);
+  width: 0;
+}
+
+.article-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  margin-bottom: var(--space-32);
+}
+
+.article-nav a:hover {
+  transition: 0.4s;
+  color: var(--color-primary01);
+}
+
+.article-date-time {
+  display: flex;
+  align-items: start;
+  gap: var(--space-12);
+}
+
+.article-date,
+.article-time {
+  display: inline-block;
+  padding: var(--space-12) var(--space-20);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--bdr-primary);
+  box-shadow: var(--box-shadow-soft);
+}
+
+.article-date,
+.article-img-primary,
+.article-title {
+  margin-bottom: var(--space-40);
+}
+
+.article-img-primary img {
+  object-fit: cover;
+  width: 100%;
+  height: 520px;
+  border-radius: var(--bdr-primary);
+  box-shadow: var(--box-shadow-soft);
+  margin-top: var(--space-32);
+  margin-bottom: var(--space-32);
+}
+
+.article {
+  background-color: var(--color-card);
+  border-radius: var(--bdr-primary);
+  padding: var(--space-32) var(--space-60);
+  box-shadow: var(--box-shadow);
+}
+
+.article-divider {
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-stroke);
+}
+
+.article-content {
+  margin-top: var(--space-40);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.article-content.editor-content ul,
+.article-content.editor-content ol {
+  margin: var(--space-20) 0;
+}
+
+.article-infos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-12);
+}
+
+.article-author,
+.article-author-infos,
+.article-last-time,
+.article-social-media {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.article-author-name {
+  padding: 8px 12px;
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--bdr-primary);
+  box-shadow: var(--box-shadow-soft);
+
+  /* Indica que o nome do autor é clicável */
+  cursor: pointer;
+}
+
+/* Feedback ao passar o mouse sobre o nome do autor */
+.article-author-name:hover {
+  text-decoration: underline;
+}
+
+.article-circle {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-stroke);
+  border-radius: 50%;
+}
+
+@media (max-width: 899px) {
+  .article-infos {
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-20);
+  }
+
+  .article-author {
+    order: 2;
+  }
+
+  .article-last-time {
+    flex: 0 0 100%;
+    order: 1;
+  }
+  .article-social-media {
+    /* flex: 1; */
+    order: 3;
+  }
+
+  .article-img-primary img {
+    height: 260px;
+  }
+
+  .article {
+    padding: var(--space-32) var(--space-32);
+  }
+}
+
+@media (max-width: 639px) {
+  h1 {
+    font-size: var(--h3-size);
+    line-height: var(--h3-lh);
+    text-align: start;
+  }
+  h2 {
+    font-size: var(--h4-size);
+    line-height: var(--h4-lh);
+  }
+  h3 {
+    font-size: var(--h5-size);
+    line-height: var(--h5-lh);
+  }
+  h4 {
+    font-size: var(--h6-size);
+    line-height: var(--h6-lh);
+  }
+
+  .article-author-writer {
+    display: none;
+  }
+
+  .article-infos {
+    text-align: end;
+  }
+
+  .article-img-primary img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 479px) {
+  /* h3 {
+    font-size: var(--h6-size);
+    line-height: var(--h6-lh);
+  } */
+}

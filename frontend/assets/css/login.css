@@ -1,0 +1,380 @@
+.auth__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-32);
+  place-items: center;
+  background-color: var(--color-card);
+  border-radius: var(--bdr-primary);
+  box-shadow: var(--box-shadow);
+}
+
+.auth__panel {
+  padding: var(--space-120) 0;
+  width: 100%;
+  max-width: 660px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth__divider {
+  width: 100%;
+  height: 2px;
+  border-color: var(--color-stroke);
+  margin-bottom: var(--space-32);
+}
+
+.auth__brandside {
+  background-color: var(--color-dark);
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+.auth__brandside img {
+  max-width: 460px;
+  height: 460px;
+  display: block;
+}
+
+.auth__back {
+  align-self: center;
+  margin-bottom: var(--space-60);
+  padding: var(--space-12) var(--space-24);
+  border: 1px solid var(--color-primary03);
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--color-text-primary);
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  background: transparent;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+
+.auth__back::before {
+  content: "";
+  position: absolute;
+  inset: -10% -5% 0;
+  background: radial-gradient(
+      120% 180% at 50% 120%,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0) 55%
+    ),
+    var(--color-primary01);
+  border-radius: inherit;
+  transform: translateY(110%);
+  transform-origin: 50% 100%;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.auth__back:hover,
+.auth__back:focus-visible {
+  color: var(--color-white);
+  border-color: var(--color-primary01);
+}
+
+.auth__back:hover::before,
+.auth__back:focus-visible::before {
+  transform: translateY(0);
+}
+
+.auth__back:focus-visible {
+  outline: 2px solid var(--color-primary01);
+  outline-offset: 4px;
+}
+.auth__title {
+  text-align: center;
+  margin-bottom: var(--space-16);
+}
+.auth__subtitle {
+  text-align: center;
+  margin-bottom: var(--space-40);
+}
+
+.auth__form {
+  display: grid;
+  gap: var(--space-24);
+}
+.field__label {
+  display: block;
+  margin-bottom: var(--space-12);
+}
+
+.field__control {
+  border-radius: var(--bdr-primary);
+  border: 1px solid var(--color-stroke);
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-24);
+  padding: var(--space-12);
+  background: var(--color-card);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth__submit {
+  margin-top: var(--space-24);
+  margin-bottom: var(--space-32);
+  padding: var(--space-20) var(--space-32);
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  border: 1px solid var(--color-primary03);
+  border-radius: var(--bdr-primary);
+  color: var(--color-text-primary);
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  cursor: pointer;
+  transition: color 0.4s ease, border-color 0.4s ease;
+}
+
+.auth__submit::before {
+  content: "";
+  position: absolute;
+  inset: -10% -5% 0;
+  background: radial-gradient(
+      120% 180% at 50% 120%,
+      rgba(255, 255, 255, 0.35) 0%,
+      rgba(255, 255, 255, 0) 55%
+    ),
+    var(--color-primary01);
+  border-radius: inherit;
+  transform: translateY(110%);
+  transform-origin: 50% 100%;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.auth__submit:hover,
+.auth__submit:focus-visible {
+  color: var(--color-text-primary);
+  border-color: var(--color-primary01);
+}
+
+.auth__submit:hover::before,
+.auth__submit:focus-visible::before {
+  transform: translateY(0);
+}
+
+.auth__submit:focus-visible {
+  outline: 2px solid var(--color-primary01);
+  outline-offset: 4px;
+}
+
+.auth__submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.field__error {
+  color: #f66;
+  font-size: 0.9rem;
+}
+
+.field__control.box-grad {
+  border-color: transparent;
+  background: linear-gradient(var(--color-card), var(--color-card)) padding-box,
+    linear-gradient(to bottom, #e72225 0%, #1a1a1a 100%) border-box;
+}
+
+.field__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 999px;
+  border: 1px solid var(--color-stroke);
+  background: var(--color-card);
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.field__icon svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.field__icon.box-grad {
+  border-color: transparent;
+  background: linear-gradient(var(--color-card), var(--color-card)) padding-box,
+    linear-gradient(to bottom, #e72225 0%, #1a1a1a 100%) border-box;
+}
+
+.field__icon.box-grad svg {
+  transform: scale(1.05);
+}
+
+.field__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  padding-block: var(--space-16);
+}
+
+.field__input:focus {
+  outline: none;
+}
+
+.field__control--password .field_toggle {
+  background: none;
+  border: none;
+  color: var(--color-text-second);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+}
+
+.field__control--password .field_toggle svg {
+  display: block;
+  width: 28px;
+  height: 28px;
+}
+
+.field__control--password .field_toggle svg path {
+  stroke: var(--color-stroke);
+  transition: stroke 0.3s ease;
+}
+
+.field__control.box-grad .field_toggle svg path {
+  stroke: var(--color-text-primary);
+}
+
+.field__control--password .field_toggle:focus-visible {
+  outline: 2px solid var(--color-primary01);
+  outline-offset: 3px;
+}
+
+.field__control--password .field_toggle[aria-pressed="true"] {
+  color: var(--color-text-primary);
+}
+
+.field_error {
+  margin-top: var(--space-20);
+  text-align: center;
+  color: var(--color-primary01);
+  border: 1px solid var(--color-stroke);
+  padding: var(--space-12) 0;
+  border-radius: var(--bdr-primary);
+}
+
+@media (max-width: 1279px) {
+  .auth__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-24);
+    background-color: var(--color-card);
+    border-radius: var(--bdr-primary);
+    box-shadow: var(--box-shadow);
+  }
+}
+.auth__brandside img {
+  max-width: 260px;
+  height: 260px;
+  display: block;
+}
+
+@media (max-width: 479px) {
+  .auth__brandside img {
+    max-width: 180px;
+    height: 180px;
+    display: block;
+  }
+
+  .auth__grid {
+    padding: var(--space-12);
+    text-align: center;
+  }
+
+  .field__input {
+    max-width: 160px;
+  }
+}
+
+.auth-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-24);
+  background: transparent;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  z-index: 1600;
+}
+
+.auth-modal[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.auth-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.auth-modal__dialog {
+  position: relative;
+  width: min(420px, 100%);
+  background: var(--color-card);
+  border-radius: var(--bdr-primary);
+  padding: var(--space-32);
+  box-shadow: var(--box-shadow);
+  border: 1px solid var(--color-stroke);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  transform: translateY(24px);
+  transition: transform 240ms ease;
+}
+
+.auth-modal[data-open="true"] .auth-modal__dialog {
+  transform: translateY(0);
+}
+
+.auth-modal__icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-inline: auto;
+  color: var(--color-primary01);
+  background: color-mix(in srgb, var(--color-primary01) 18%, transparent);
+}
+
+.auth-modal__title {
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+.auth-modal__text {
+  text-align: center;
+  color: var(--color-text-second);
+  line-height: 1.6;
+}
+
+.auth-modal__button {
+  align-self: center;
+  padding: 8px var(--space-32);
+  border-radius: var(--bdr-primary) !important;
+}

@@ -1,0 +1,54 @@
+/* Estilos específicos para a página de resultados de busca */
+
+.busca-section {
+  padding-top: 32px;
+  padding-bottom: 64px;
+}
+
+.busca-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-primary01);
+  border-radius: var(--bdr-primary);
+  padding: 8px var(--space-16);
+  background: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.busca-back:hover,
+.busca-back:focus-visible {
+  text-decoration: underline;
+}
+
+.busca-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1.3;
+  margin-bottom: 32px;
+  color: var(--color-text-primary);
+}
+
+/*
+ * A lista de resultados utiliza o mesmo padrão de grid das últimas notícias
+ * da página inicial: três colunas com espaçamento de 24px entre os cards
+ * em telas maiores. Em telas menores, a estrutura se adapta para uma
+ * coluna única com layout responsivo semelhante ao da home.
+ */
+.busca-list {
+  margin-top: var(--space-32);
+}
+
+.busca-empty {
+  font-size: 18px;
+  color: var(--color-text-secondary);
+  margin-top: 32px;
+}
+
+.busca-actions {
+  margin-top: var(--space-40);
+}

@@ -1,0 +1,45 @@
+{
+  "id": "/",
+  "name": "The Last Update",
+  "short_name": "TLU",
+  "description": "Blog de notícias, análises, reviews e novidades de tecnologia com foco em cultura pop e gamer.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    {
+      "src": "/assets/img/logo/tlu-logo.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/img/logo/tlu-logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Notícias Recentes",
+      "short_name": "Notícias",
+      "description": "Veja as últimas publicações",
+      "url": "/?aba=visao"
+    },
+    {
+      "name": "Quem Somos",
+      "short_name": "Equipe",
+      "description": "Conheça o The Last Update",
+      "url": "/quemsomos"
+    },
+    {
+      "name": "Área do Jornalista",
+      "short_name": "Jornalista",
+      "description": "Acesse o painel de membros",
+      "url": "/login"
+    }
+  ]
+}

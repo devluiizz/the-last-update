@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore o perfil e as publicações de cada jornalista do The Last Update e acompanhe o trabalho da equipe.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.thelastupdate.com.br/jornalista">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="apple-touch-icon" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Last Update">
+  <meta property="og:title" content="Jornalista | The Last Update">
+  <meta property="og:description" content="Explore o perfil e as publicações de cada jornalista do The Last Update e acompanhe o trabalho da equipe.">
+  <meta property="og:url" content="https://www.thelastupdate.com.br/jornalista">
+  <meta property="og:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jornalista | The Last Update">
+  <meta name="twitter:description" content="Explore o perfil e as publicações de cada jornalista do The Last Update e acompanhe o trabalho da equipe.">
+  <meta name="twitter:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/home.css">
+  <link rel="stylesheet" href="../assets/css/jornalista.css">
+  <script defer src="../assets/js/lib/include.js"></script>
+  <script defer src="../assets/js/pages/header.js"></script>
+  <script defer src="../assets/js/lib/utils.js"></script>
+  <title>TLU - Jornalista</title>
+</head>
+
+<body>
+  <div data-include="../partials/header.html"></div>
+
+  <main class="container">
+    <section id="journalist-info" class="journalist-info"></section>
+
+    <section id="journalist-controls" class="journalist-controls"></section>
+
+    <section id="journalist-news" class="journalist-news latest__grid latest__grid--animated"></section>
+
+    <div class="journalist-footer latest__footer" id="journalist-footer" hidden>
+      <p id="journalist-counter" class="latest__counter" aria-live="polite" hidden></p>
+      <button id="journalist-load-more" class="btn-lg btn--more btn--more--floating" type="button" aria-controls="journalist-news" hidden>
+        Carregar mais
+      </button>
+    </div>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+
+  <script type="module" src="../assets/js/pages/jornalista.js"></script>
+  <script type="module" src="../assets/js/push/push-client.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,189 @@
+/* Estilos para a página de perfil do jornalista */
+
+/* Container principal do cartão do jornalista */
+/* Layout da área de informações do jornalista. Centraliza o cartão e mantém espaçamento. */
+.journalist-info {
+  margin-top: var(--space-32);
+  margin-bottom: var(--space-32);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-24);
+}
+
+/*
+  Para o cartão de perfil do jornalista, reutilizamos o mesmo design do cartão de membros da equipe
+  definido em aboutus.css (.team-card). Copiamos os estilos essenciais aqui para evitar carregar
+  o arquivo completo de equipe e garantir consistência visual.
+*/
+.team-card {
+  flex: 0 0 calc(33.333% - var(--space-24));
+  background: var(--color-card);
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--bdr-primary);
+  padding: var(--space-12);
+  box-shadow: var(--box-shadow-soft);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.team-card__image {
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  border-radius: var(--bdr-primary) var(--bdr-primary) 0 0;
+}
+
+@media (max-width: 980px) {
+  .team-card__image {
+    height: 320px;
+  }
+}
+@media (max-width: 639px) {
+  .team-card__image {
+    height: 220px;
+  }
+}
+
+.team-card__name {
+  margin-top: var(--space-20);
+  margin-bottom: var(--space-12);
+}
+
+.team-card__roles {
+  color: var(--color-text-second);
+  margin-bottom: var(--space-20);
+}
+
+.team-card__divider {
+  width: 100%;
+  height: 2px;
+  margin-bottom: var(--space-20);
+  background: radial-gradient(
+    circle,
+    var(--color-primary01) 0%,
+    transparent 60%
+  );
+}
+
+.team-card__bio {
+  margin-bottom: var(--space-20);
+  color: var(--color-text-second);
+}
+
+.team-card__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-08, 8px);
+  margin-top: var(--space-12);
+}
+
+.team-card__social-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--color-text-primary) 18%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--color-card, #151515) 70%,
+    var(--color-bg, #0f0f0f) 30%
+  );
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.team-card__social-link:hover,
+.team-card__social-link:focus-visible {
+  border-color: var(--color-primary01);
+  background: color-mix(in srgb, var(--color-card, #151515) 55%, var(--color-primary01) 20%);
+  transform: translateY(-2px);
+}
+
+.icon-social {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  color: currentColor;
+}
+
+.icon-social svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Ajustes específicos para a página do jornalista: centraliza o cartão e limita sua largura */
+.journalist-info .team-card {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* Meta informações: data de cadastro e quantidade de publicações */
+.journalist-meta {
+  font-size: 1rem;
+  color: var(--color-text-second);
+  text-align: center;
+}
+
+.journalist-meta .destaque {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Controles de filtro e ordenação (replicam o estilo da home, centralizados) */
+.journalist-controls {
+  margin-bottom: var(--space-32);
+}
+
+/* Centraliza o cabeçalho de filtros (abas e busca) */
+.journalist-controls .latest__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-24);
+}
+
+/* Ajusta as abas de categorias para que fiquem centralizadas e com quebra de linha */
+.journalist-controls .latest__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  justify-content: center;
+}
+
+/* Centraliza as seções de filtros adicionais (ordenar e subcategorias) */
+.journalist-controls .latest__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-16);
+  justify-content: center;
+  margin-top: var(--space-16);
+}
+
+/* Garantir que o campo de busca ocupe toda a largura possível em dispositivos estreitos */
+.journalist-controls .latest__search .search-wrap {
+  width: 100%;
+}
+
+/* Grid de publicações do jornalista */
+/* A lista de publicações é centralizada. Cada linha contém até três cards, que são alinhados ao centro quando houver menos itens. */
+.journalist-news {
+  margin-top: var(--space-24);
+  width: 100%;
+}
+
+.journalist-footer {
+  margin-top: var(--space-40);
+}
+
+
+
+

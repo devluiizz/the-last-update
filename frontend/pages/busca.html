@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Busque notícias, análises e reviews no The Last Update e encontre rapidamente tudo sobre tecnologia e cultura gamer.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.thelastupdate.com.br/busca">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="apple-touch-icon" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Last Update">
+  <meta property="og:title" content="Resultados da busca | The Last Update">
+  <meta property="og:description" content="Busque notícias, análises e reviews no The Last Update e encontre rapidamente tudo sobre tecnologia e cultura gamer.">
+  <meta property="og:url" content="https://www.thelastupdate.com.br/busca">
+  <meta property="og:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Resultados da busca | The Last Update">
+  <meta name="twitter:description" content="Busque notícias, análises e reviews no The Last Update e encontre rapidamente tudo sobre tecnologia e cultura gamer.">
+  <meta name="twitter:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/home.css">
+  <link rel="stylesheet" href="../assets/css/busca.css">
+  <script defer src="../assets/js/lib/include.js"></script>
+  <script defer src="../assets/js/pages/header.js"></script>
+  <script defer src="../assets/js/lib/utils.js"></script>
+  <title>Resultados da busca | The Last Update</title>
+</head>
+
+<body>
+  <div data-include="../partials/header.html"></div>
+
+  <main class="container">
+    <section class="busca-section" aria-labelledby="busca-title">
+      <button class="busca-back btn-md" id="busca-back" type="button">← Voltar</button>
+      <h1 class="busca-title" id="busca-title">Resultados para: <span id="busca-termo"></span></h1>
+      <div id="busca-list" class="busca-list latest__grid latest__grid--animated"></div>
+      <div class="busca-actions latest__footer" id="busca-footer" hidden>
+        <p id="busca-counter" class="latest__counter" aria-live="polite" hidden></p>
+        <button class="btn-lg btn--more btn--more--floating" id="busca-load-more" type="button" aria-controls="busca-list" hidden>
+          Carregar mais
+        </button>
+      </div>
+      <div id="busca-empty" class="busca-empty" hidden>Nenhuma notícia encontrada para "<span id="busca-empty-term"></span>"</div>
+    </section>
+  </main>
+
+  <div data-include="../partials/footer.html"></div>
+
+  <script type="module" src="../assets/js/pages/busca.js"></script>
+  <script type="module" src="../assets/js/push/push-client.js"></script>
+</body>
+
+</html>

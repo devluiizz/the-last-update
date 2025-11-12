@@ -1,0 +1,17 @@
+# Robots configuration for The Last Update
+#
+# This file informs search engine crawlers which parts of your site should
+# be indexed. We allow indexing of all public pages and explicitly disallow
+# access to administrative or private routes. Update the Sitemap URL below
+# to point to your production domain when deploying.
+
+User-agent: *
+# Block only áreas realmente administrativas
+Disallow: /dashboard
+Disallow: /admin
+
+# Permitir que páginas públicas, inclusive a área do jornalista (login),
+# sejam indexadas para habilitar sitelinks.
+Allow: /
+
+Sitemap: https://www.thelastupdate.com.br/sitemap.xml

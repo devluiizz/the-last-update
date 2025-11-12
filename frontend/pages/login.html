@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Acesse a área do jornalista do The Last Update para publicar notícias e gerenciar conteúdos.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://www.thelastupdate.com.br/login">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="apple-touch-icon" href="/assets/img/logo/tlu-logo.svg">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="The Last Update">
+  <meta property="og:title" content="Ãrea do Jornalista | The Last Update">
+  <meta property="og:description" content="Acesse a área do jornalista do The Last Update para publicar notícias e gerenciar conteúdos.">
+  <meta property="og:url" content="https://www.thelastupdate.com.br/login">
+  <meta property="og:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ãrea do Jornalista | The Last Update">
+  <meta name="twitter:description" content="Acesse a área do jornalista do The Last Update para publicar notícias e gerenciar conteúdos.">
+  <meta name="twitter:image" content="https://www.thelastupdate.com.br/assets/img/og-default.png">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/login.css">
+  <script defer src="../assets/js/lib/include.js"></script>
+  <script defer src="../assets/js/pages/header.js"></script>
+  <script defer src="../assets/js/lib/utils.js"></script>
+  <title>Área do Jornalista</title>
+</head>
+
+<body>
+
+  <div data-include="../partials/header.html"></div>
+
+  <main class="container">
+
+    <section id="auth" class="auth" aria-labelledby="auth-title">
+      <div class="auth__grid">
+
+        <div class="auth__panel">
+          <a href="/" class="auth__back btn-lg box-grad glow-button"><span aria-hidden="true">←</span> Voltar ao Blog</a>
+
+          <h3 id="auth-title" class="auth__title">Área Do Jornalista</h3>
+          <p class="auth__subtitle">Bem Vindo! Coloque abaixo suas informações para acessar sua área:</p>
+
+          <form id="auth-form" class="auth__form" novalidate>
+
+            <div class="field">
+              <label for="cpf" class="field__label btn-md">Digite o CPF:</label>
+              <div class="field__control">
+                <span class="field__icon" aria-hidden="true">
+                  <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.9287 28.2741C13.7072 25.6578 17.4165 23.75 18.9998 23.75C20.5832 23.75 24.2925 25.6578 25.071 28.2741M12.9287 28.2741C14.6725 29.418 16.7585 30.0833 18.9998 30.0833C21.2412 30.0833 23.3271 29.418 25.071 28.2741M12.9287 28.2741C9.91005 26.294 7.9165 22.8798 7.9165 19C7.9165 12.8788 12.8787 7.91666 18.9998 7.91666C21.8851 7.91666 24.5129 9.01918 26.4849 10.8259M25.071 28.2741C28.0896 26.294 30.0832 22.8798 30.0832 19C30.0832 17.513 29.7903 16.0943 29.2592 14.7986M22.1665 15.8333C22.1665 18.0195 20.7487 20.5833 18.9998 20.5833C17.2509 20.5833 15.8332 18.0195 15.8332 15.8333C15.8332 13.6472 17.2509 12.6667 18.9998 12.6667C20.7487 12.6667 22.1665 13.6472 22.1665 15.8333Z" stroke="var(--color-darkwhite)" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <input id="cpf" class="field__input btn-lg" name="cpf" type="text" inputmode="numeric" autocomplete="username" placeholder="000.000.000-00" maxlength="14" required>
+              </div>
+              <p class="field_error btn-md" id="cpf-error" hidden>CPF inválido!</p>
+            </div>
+
+            <div class="field">
+              <label for="password" class="field__label btn-md">Digite a senha:</label>
+              <div class="field__control field__control--password">
+                <span class="field__icon" aria-hidden="true">
+                  <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.7502 12.6667C23.7502 10.0433 21.6235 7.91669 19.0002 7.91669C16.3768 7.91669 14.2502 10.0433 14.2502 12.6667V17.4167M14.2502 17.4167H13.0835C11.9789 17.4167 11.0835 18.3121 11.0835 19.4167V28.0834C11.0835 29.1879 11.9789 30.0834 13.0835 30.0834H24.9168C26.0214 30.0834 26.9168 29.1879 26.9168 28.0834V19.4167C26.9168 18.3121 26.0214 17.4167 24.9168 17.4167H14.2502Z" stroke="var(--color-darkwhite)" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </span>
+                <input id="password" class="field__input btn-lg" name="password" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+                <button type="button" class="field_toggle" aria-label="Mostrar/Ocultar senha" aria-pressed="false" id="toggle-password">
+                  <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M27.52 13.6862C30.0676 15.7556 31.6668 18.1592 31.6668 19C31.6668 20.5834 25.9958 27.7084 19.0002 27.7084C12.0046 27.7084 6.3335 20.5834 6.3335 19C6.3335 17.4167 12.0046 10.2917 19.0002 10.2917C20.4367 10.2917 21.8174 10.5921 23.1046 11.0834M25.3335 12.6667L12.3522 25.648M23.7502 19C23.7502 21.6234 21.6235 23.75 19.0002 23.75C16.3768 23.75 14.2502 21.6234 14.2502 19C14.2502 16.3767 16.3768 14.25 19.0002 14.25C21.6235 14.25 23.7502 16.3767 23.7502 19Z" stroke="var(--color-darkwhite)" stroke-width="1.5" stroke-linecap="round" />
+                  </svg>
+                </button>
+              </div>
+              <p class="field_error btn-md" id="password-error" hidden>Informe a senha.</p>
+            </div>
+
+            <button type="submit" class="auth__submit btn-lg glow-button">Entrar</button>
+
+          </form>
+
+          <hr class="auth__divider">
+
+          <h4 class="auth__brand">THE LAST UPDATE</h4>
+        </div>
+
+        <aside class="auth__brandside" aria-hidden="true">
+          <img src="../assets/img/logo/tlu-logo.svg" data-dark="../assets/img/logo/tlu-logo.svg" data-light="../assets/img/logo/tlu-logo-dark.svg" alt="Logo The Last Update">
+        </aside>
+
+      </div>
+    </section>
+
+    <script src="../assets/js/pages/login.js" defer></script>
+
+  </main>
+
+  <div class="auth-modal" id="loginErrorModal" hidden>
+    <div class="auth-modal__overlay" data-dismiss="login-error"></div>
+    <div class="auth-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="loginErrorTitle" aria-describedby="loginErrorDescription">
+      <div class="auth-modal__icon" aria-hidden="true">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="4" opacity="0.2" />
+          <path d="M24 15V27" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+          <circle cx="24" cy="33" r="2" fill="currentColor" />
+        </svg>
+      </div>
+      <h2 class="auth-modal__title btn-lg" id="loginErrorTitle">Credenciais inválidas</h2>
+      <p class="auth-modal__text btn-sm" id="loginErrorDescription">As credenciais informadas estão incorretas. Verifique seu CPF e senha.</p>
+      <button type="button" class="auth-modal__button btn-lg glow-button" id="loginErrorRetry">Tentar novamente</button>
+    </div>
+  </div>
+
+
+  <div data-include="../partials/footer.html"></div>
+
+  <script type="module" src="../assets/js/push/push-client.js"></script>
+
+</body>
+
+</html>
