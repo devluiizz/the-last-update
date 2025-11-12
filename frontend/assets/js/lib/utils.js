@@ -281,3 +281,91 @@
   window.clampToLines = clampToLines;
   window.appModal = modalController;
 })();
+
+(() => {
+  function initLegalAccordions() {
+    const sections = Array.from(
+      document.querySelectorAll(".legal-section .open")
+    );
+    if (!sections.length) return;
+
+    const resizeObservers = [];
+
+    function collapse(section, panel, header) {
+      section.classList.remove("is-open");
+      panel.style.maxHeight = "0px";
+      panel.setAttribute("aria-hidden", "true");
+      header.setAttribute("aria-expanded", "false");
+    }
+
+    function expand(section, panel, header) {
+      section.classList.add("is-open");
+      panel.style.maxHeight = `${panel.scrollHeight}px`;
+      panel.setAttribute("aria-hidden", "false");
+      header.setAttribute("aria-expanded", "true");
+    }
+
+    sections.forEach((section) => {
+      const header = section.querySelector("h4");
+      if (!header) return;
+
+      let panel = section.querySelector(".open__content");
+      if (!panel) {
+        panel = document.createElement("div");
+        panel.className = "open__content";
+        const fragment = document.createDocumentFragment();
+        let node = header.nextSibling;
+        while (node) {
+          const next = node.nextSibling;
+          fragment.appendChild(node);
+          node = next;
+        }
+        panel.appendChild(fragment);
+        section.appendChild(panel);
+      }
+
+      panel.style.maxHeight = "0px";
+      panel.setAttribute("aria-hidden", "true");
+
+      header.setAttribute("role", "button");
+      header.setAttribute("tabindex", "0");
+      header.setAttribute("aria-expanded", "false");
+
+      const toggle = () => {
+        const isOpen = section.classList.contains("is-open");
+        if (isOpen) {
+          collapse(section, panel, header);
+        } else {
+          expand(section, panel, header);
+        }
+      };
+
+      header.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggle();
+      });
+
+      header.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggle();
+        }
+      });
+
+      resizeObservers.push({ section, panel, header });
+    });
+
+    window.addEventListener("resize", () => {
+      resizeObservers.forEach(({ section, panel }) => {
+        if (!section.classList.contains("is-open")) return;
+        panel.style.maxHeight = `${panel.scrollHeight}px`;
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initLegalAccordions);
+  } else {
+    initLegalAccordions();
+  }
+})();

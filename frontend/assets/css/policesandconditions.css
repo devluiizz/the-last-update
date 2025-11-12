@@ -1,0 +1,76 @@
+ul,
+li {
+  list-style: initial;
+  margin-left: var(--space-20);
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+h4 {
+  margin-top: var(--space-32);
+  margin-bottom: var(--space-20);
+}
+
+.open {
+  border: 1px solid var(--color-stroke);
+  border-radius: var(--bdr-primary);
+  background: color-mix(in srgb, var(--color-card, #151515) 80%, transparent);
+  margin-top: var(--space-32);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.open h4 {
+  margin: 0;
+  padding: var(--space-16) var(--space-20);
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  cursor: pointer;
+  font-size: var(--h5-size);
+  color: var(--color-text-primary);
+  transition: color 0.2s ease;
+}
+
+.open h4::before {
+  content: "▾";
+  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+  color: var(--color-primary01);
+}
+
+.open.is-open h4::before {
+  transform: rotate(180deg);
+}
+
+.open h4:hover {
+  color: var(--color-primary01);
+}
+
+.open__content {
+  padding: 0 var(--space-20) var(--space-20);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+}
+
+.open.is-open .open__content {
+  opacity: 1;
+}
+
+main a {
+  color: var(--color-primary01);
+  text-decoration: underline;
+}
+
+a:hover {
+  color: var(--color-primary03);
+}
