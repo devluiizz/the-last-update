@@ -1468,7 +1468,6 @@
   const btnRight = $("#cmd-align-right", scope);
   const btnJust = $("#cmd-align-justify", scope);
 
-  const colorInput = $("#color-picker", scope);
   const btnLink = $("#cmd-link", scope);
   const btnImage = $("#cmd-image", scope);
   const btnAudio = $("#cmd-audio", scope);
@@ -1667,6 +1666,56 @@
     return anchorInside || focusInside;
   }
 
+  function getSelectedLinkElement(selectionAlreadyInside) {
+    if (!editor) return null;
+    const inside =
+      selectionAlreadyInside === true
+        ? true
+        : selectionAlreadyInside === false
+        ? false
+        : selectionInsideEditor();
+    if (!inside) return null;
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return null;
+    const range = sel.getRangeAt(0);
+    const nodes = [
+      sel.anchorNode,
+      sel.focusNode,
+      range.startContainer,
+      range.endContainer,
+    ];
+    const anchors = nodes
+      .map((node) => {
+        if (!node) return null;
+        const baseNode =
+          node.nodeType === Node.ELEMENT_NODE
+            ? node
+            : node.parentElement || node.parentNode;
+        if (!baseNode) return null;
+        if (baseNode.tagName === "A") return baseNode;
+        return baseNode.closest ? baseNode.closest("a") : null;
+      })
+      .filter(
+        (link) =>
+          link &&
+          link.tagName === "A" &&
+          (link === editor || editor.contains(link))
+      );
+    if (!anchors.length) return null;
+    const primary = anchors[0];
+    const sameAnchor = anchors.every((link) => link === primary);
+    if (!sameAnchor) return null;
+    const startNode = range.startContainer;
+    const endNode = range.endContainer;
+    const startInside =
+      primary === startNode ||
+      (primary.contains && primary.contains(startNode));
+    const endInside =
+      primary === endNode || (primary.contains && primary.contains(endNode));
+    if (!startInside || !endInside) return null;
+    return primary;
+  }
+
   function refreshStyleButtons() {
     const inside = selectionInsideEditor();
     styleToggleButtons.forEach(({ button, command }) => {
@@ -1683,6 +1732,10 @@
       }
       button.classList.toggle("is-active", !!isActive);
     });
+    if (btnLink) {
+      const linkEl = getSelectedLinkElement(inside);
+      btnLink.classList.toggle("is-active", !!(inside && linkEl));
+    }
   }
 
   function focusEditor() {
@@ -1761,6 +1814,50 @@
     const text = editor.innerText || "";
     const words = text.trim().length ? text.trim().split(/\s+/).length : 0;
     wordCount.textContent = `${words} ${words === 1 ? "palavra" : "palavras"}`;
+  }
+
+  function unwrapLinkNode(linkEl) {
+    if (!linkEl || linkEl.tagName !== "A" || !linkEl.parentNode) return null;
+    const parent = linkEl.parentNode;
+    let firstChild = linkEl.firstChild;
+    let lastChild = linkEl.lastChild || firstChild;
+    while (linkEl.firstChild) {
+      const child = linkEl.firstChild;
+      parent.insertBefore(child, linkEl);
+      if (!firstChild) firstChild = child;
+      lastChild = child;
+    }
+    parent.removeChild(linkEl);
+    return { parent, firstChild, lastChild };
+  }
+
+  function removeLinkElement(linkEl) {
+    const result = unwrapLinkNode(linkEl);
+    if (!result) return;
+    const { firstChild, lastChild } = result;
+    if (firstChild && lastChild) {
+      const range = document.createRange();
+      range.setStartBefore(firstChild);
+      range.setEndAfter(lastChild);
+      const sel = window.getSelection();
+      if (sel) {
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    }
+    syncSource();
+    updateWordCount();
+    refreshStyleButtons();
+  }
+
+  function unwrapAnchorsWithin(node) {
+    if (!node || !node.childNodes) return;
+    Array.from(node.childNodes).forEach((child) => {
+      if (child.nodeType === Node.ELEMENT_NODE) {
+        unwrapAnchorsWithin(child);
+        if (child.tagName === "A") unwrapLinkNode(child);
+      }
+    });
   }
 
   function getCurrentBlockNode() {
@@ -2291,15 +2388,14 @@
       applyExec("justifyFull");
     });
 
-  if (colorInput)
-    colorInput.addEventListener("input", () =>
-      applyExec("foreColor", colorInput.value)
-    );
-
   if (btnLink)
     btnLink.addEventListener("click", () => {
       const sel = window.getSelection();
-      if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+      const insideEditor = selectionInsideEditor();
+      const existingLink = getSelectedLinkElement(insideEditor);
+      const hasSelection =
+        sel && sel.rangeCount > 0 && !sel.isCollapsed && insideEditor;
+      if (!hasSelection && !existingLink) {
         openModal({
           title: "Inserir link",
           bodyHTML: `<p class="btn-sm" style="margin:0">Selecione um texto no editor para aplicar o link.</p>`,
@@ -2307,24 +2403,65 @@
         });
         return;
       }
-      const savedRange = sel.getRangeAt(0).cloneRange();
-      const { modal } = openModal({
+      const savedRange =
+        sel && sel.rangeCount > 0 ? sel.getRangeAt(0).cloneRange() : null;
+      const initialUrl = existingLink?.getAttribute("href") || "";
+      const shouldOpenBlank =
+        existingLink?.getAttribute("target") === "_blank" || !existingLink;
+      const { modal, close } = openModal({
         title: "Inserir link",
         bodyHTML: `
           <label class="btn-sm" style="display:block;margin-bottom:6px;">URL</label>
-          <input class="btn-sm" id="modal-link-url" type="text" placeholder="https://exemplo.com" style="width:100%;height:38px;border:1px solid var(--color-stroke);border-radius:8px;background:var(--color-card);color:inherit;padding:0 10px;">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input class="btn-sm" id="modal-link-url" type="text" placeholder="https://exemplo.com" style="flex:1;height:38px;border:1px solid var(--color-stroke);border-radius:8px;background:var(--color-card);color:inherit;padding:0 10px;">
+            <button class="btn-sm" type="button" data-link-remove aria-label="Remover link" title="Remover link" style="height:38px;width:38px;border-radius:8px;border:1px solid var(--color-stroke);background:var(--color-card);color:var(--color-text-primary);${
+              existingLink ? "" : "display:none;"
+            }">&times;</button>
+          </div>
           <div style="margin-top:8px;">
-            <label class="btn-sm"><input id="modal-link-blank" type="checkbox" checked> Abrir em nova aba</label>
+            <label class="btn-sm"><input id="modal-link-blank" type="checkbox" ${
+              shouldOpenBlank ? "checked" : ""
+            }> Abrir em nova aba</label>
           </div>
         `,
         confirmText: "Aplicar",
         onConfirm: ({ modal, close }) => {
-          let url = modal.querySelector("#modal-link-url").value.trim();
-          const blank = modal.querySelector("#modal-link-blank").checked;
-          if (!url) return;
+          const input = modal.querySelector("#modal-link-url");
+          const blankCheckbox = modal.querySelector("#modal-link-blank");
+          let url = input ? input.value.trim() : "";
+          const blank = blankCheckbox ? !!blankCheckbox.checked : true;
+          if (!url) {
+            if (existingLink) removeLinkElement(existingLink);
+            close();
+            return;
+          }
           if (!/^[a-z]+:/i.test(url)) url = "https://" + url;
-          const range = savedRange;
+          if (existingLink) {
+            existingLink.href = url;
+            if (blank) existingLink.setAttribute("target", "_blank");
+            else existingLink.removeAttribute("target");
+            placeCaretAfter(existingLink);
+            syncSource();
+            updateWordCount();
+            refreshStyleButtons();
+            close();
+            return;
+          }
+          if (!savedRange) {
+            close();
+            return;
+          }
+          const range =
+            typeof savedRange.cloneRange === "function"
+              ? savedRange.cloneRange()
+              : savedRange;
+          const selection = window.getSelection();
+          if (selection) {
+            selection.removeAllRanges();
+            selection.addRange(range);
+          }
           const contents = range.extractContents();
+          unwrapAnchorsWithin(contents);
           const a = document.createElement("a");
           a.href = url;
           if (blank) a.setAttribute("target", "_blank");
@@ -2332,10 +2469,26 @@
           range.insertNode(a);
           placeCaretAfter(a);
           syncSource();
+          updateWordCount();
+          refreshStyleButtons();
           close();
         },
       });
-      setTimeout(() => modal.querySelector("#modal-link-url")?.focus(), 0);
+      setTimeout(() => {
+        const input = modal.querySelector("#modal-link-url");
+        if (input) {
+          input.value = initialUrl;
+          input.focus();
+          if (initialUrl) input.select();
+        }
+      }, 0);
+      const removeBtn = modal.querySelector("[data-link-remove]");
+      if (removeBtn && existingLink) {
+        removeBtn.addEventListener("click", () => {
+          removeLinkElement(existingLink);
+          close();
+        });
+      }
     });
 
   if (editor) {

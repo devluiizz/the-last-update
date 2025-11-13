@@ -76,6 +76,24 @@ a {
   text-decoration: none;
 }
 
+.editor-content a,
+.editor-content a:visited {
+  color: var(--color-primary01) !important;
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary01);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease,
+    text-decoration-thickness 0.2s ease;
+}
+
+.editor-content a:hover,
+.editor-content a:focus-visible {
+  color: var(--color-primary03) !important;
+  text-decoration-color: var(--color-primary03);
+  text-decoration-thickness: 2px;
+}
+
 :root {
   --container-max: 1440px;
   --container-gutter: 32px;

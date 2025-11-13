@@ -204,14 +204,6 @@ select option {
   background: var(--color-stroke);
 }
 
-.color-picker {
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-  border: none;
-  outline: none;
-}
-
 .editor-area {
   border: 2px dotted var(--color-stroke);
   padding: var(--space-24);
