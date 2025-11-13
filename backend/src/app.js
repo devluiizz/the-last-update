@@ -11,7 +11,25 @@ const MemberRepository = require("./repositories/memberRepository");
 
 const app = express();
 
-app.use(helmet());
+const helmetConfig = {
+  contentSecurityPolicy: {
+    useDefaults: true,
+    directives: {
+      "frame-src": [
+        "'self'",
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com",
+      ],
+      "child-src": [
+        "'self'",
+        "https://www.youtube.com",
+        "https://www.youtube-nocookie.com",
+      ],
+    },
+  },
+};
+
+app.use(helmet(helmetConfig));
 app.use(express.json({ limit: "100mb" }));
 app.use(
   express.urlencoded({ extended: true, limit: "100mb", parameterLimit: 100000 })

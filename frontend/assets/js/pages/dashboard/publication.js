@@ -1713,7 +1713,7 @@
         box.style.maxWidth = "100%";
       }
     });
-    clone.querySelectorAll("img,video,audio").forEach((el) => {
+    clone.querySelectorAll("img,video,audio,iframe").forEach((el) => {
       el.removeAttribute("draggable");
       el.style && (el.style.outline = "");
     });
@@ -1853,10 +1853,16 @@
     if (
       innerEl.tagName === "IMG" ||
       innerEl.tagName === "VIDEO" ||
-      innerEl.tagName === "AUDIO"
+      innerEl.tagName === "AUDIO" ||
+      innerEl.tagName === "IFRAME"
     )
       innerEl.style.width = "100%";
     if (innerEl.tagName === "IMG") innerEl.style.height = "auto";
+    if (innerEl.tagName === "IFRAME") {
+      innerEl.style.aspectRatio = "16 / 9";
+      innerEl.style.height = "auto";
+      innerEl.style.minHeight = "220px";
+    }
     innerEl.style.maxWidth = "100%";
     innerEl.style.outline = "none";
     innerEl.style.pointerEvents = "auto";
@@ -1983,6 +1989,137 @@
     return null;
   }
 
+  function parseYoutubeTimestamp(value) {
+    if (!value) return 0;
+    let input = String(value || "").trim().toLowerCase();
+    if (!input) return 0;
+    input = input.replace(/^#/, "").replace(/^t=/, "");
+    if (!input) return 0;
+    if (/^\d+$/.test(input)) return Number(input);
+    const match = input.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
+    if (!match) return 0;
+    const hours = Number(match[1] || 0);
+    const minutes = Number(match[2] || 0);
+    const seconds = Number(match[3] || 0);
+    return hours * 3600 + minutes * 60 + seconds;
+  }
+
+  function extractYoutubeVideoData(rawInput) {
+    const value = String(rawInput || "").trim();
+    if (!value) return null;
+
+    const sanitizeId = (id) =>
+      typeof id === "string" ? id.replace(/[^a-zA-Z0-9_-]/g, "") : "";
+
+    const toUrl = (input) => {
+      if (!input) return null;
+      try {
+        return new URL(input);
+      } catch (err) {
+        try {
+          return new URL(`https://${input}`);
+        } catch (e) {
+          return null;
+        }
+      }
+    };
+
+    const url = toUrl(value);
+    let videoId = "";
+    let startAt = 0;
+
+    if (url) {
+      const host = url.hostname.replace(/^www\./i, "").toLowerCase();
+      if (host === "youtu.be") {
+        videoId = sanitizeId(url.pathname.replace(/^\/+/, "").split("/")[0]);
+      } else if (host.endsWith("youtube.com")) {
+        if (url.searchParams.get("v")) {
+          videoId = sanitizeId(url.searchParams.get("v"));
+        } else {
+          const segments = url.pathname
+            .split("/")
+            .map((seg) => seg.trim())
+            .filter(Boolean);
+          if (segments.length) {
+            const special = ["embed", "shorts", "live"];
+            const idx = segments.findIndex((seg) =>
+              special.includes(seg.toLowerCase())
+            );
+            if (idx !== -1 && segments[idx + 1]) {
+              videoId = sanitizeId(segments[idx + 1]);
+            } else {
+              const last = segments[segments.length - 1];
+              if (
+                last &&
+                !["channel", "user", "c"].includes(last.toLowerCase()) &&
+                !last.startsWith("@")
+              ) {
+                videoId = sanitizeId(last);
+              }
+            }
+          }
+        }
+      }
+      startAt =
+        parseYoutubeTimestamp(url.searchParams.get("t")) ||
+        parseYoutubeTimestamp(url.searchParams.get("start")) ||
+        parseYoutubeTimestamp(
+          url.hash ? url.hash.replace(/^#/, "") : ""
+        );
+      if (videoId && videoId.length < 8) videoId = "";
+    }
+
+    if (!videoId && /^[a-zA-Z0-9_-]{8,}$/.test(value)) {
+      videoId = value;
+    } else if (!videoId && !value.includes("://")) {
+      const maybeId = sanitizeId(value);
+      if (/^[a-zA-Z0-9_-]{8,}$/.test(maybeId)) videoId = maybeId;
+    }
+
+    if (!videoId) return null;
+    return { videoId, startAt: Math.max(0, Math.floor(startAt || 0)) };
+  }
+
+  function buildYoutubeEmbedUrl(videoId, startAt = 0) {
+    const cleanId =
+      typeof videoId === "string"
+        ? videoId.replace(/[^a-zA-Z0-9_-]/g, "")
+        : "";
+    if (!cleanId) return "";
+    const base = `https://www.youtube.com/embed/${cleanId}`;
+    if (startAt && Number(startAt) > 0) {
+      const safeStart = Math.max(0, Math.floor(Number(startAt) || 0));
+      return `${base}?start=${safeStart}`;
+    }
+    return base;
+  }
+
+  function createYoutubeIframe(videoId, startAt = 0) {
+    const src = buildYoutubeEmbedUrl(videoId, startAt);
+    if (!src) return null;
+    const iframe = document.createElement("iframe");
+    iframe.src = src;
+    iframe.width = "560";
+    iframe.height = "315";
+    iframe.style.width = "100%";
+    iframe.style.height = "auto";
+    iframe.style.aspectRatio = "16 / 9";
+    iframe.style.border = "0";
+    iframe.style.backgroundColor = "transparent";
+    iframe.setAttribute("frameborder", "0");
+    iframe.setAttribute(
+      "allow",
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    );
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.allowFullscreen = true;
+    iframe.loading = "lazy";
+    iframe.title = "YouTube video player";
+    iframe.setAttribute("title", "YouTube video player");
+    iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    return iframe;
+  }
+
   function insertNodeAtCaret(node) {
     focusEditor();
     const sel = window.getSelection();
@@ -2050,17 +2187,64 @@
   }
   if (btnVideo) {
     btnVideo.addEventListener("click", () => {
-      pickLocalFile("video/*", async ({ file, dataUrl, objectUrl }) => {
-        let url = await uploadFileToServer(file);
-        url = url || objectUrl || dataUrl;
-        const video = document.createElement("video");
-        video.src = url;
-        video.controls = true;
-        video.preload = "metadata";
-        const box = createResizableBox(video);
-        insertNodeAtCaret(box);
-        selectMediaBox(box);
+      const sel = window.getSelection();
+      const savedRange =
+        sel && sel.rangeCount > 0 ? sel.getRangeAt(0).cloneRange() : null;
+      const { modal } = openModal({
+        title: "Inserir vídeo do YouTube",
+        bodyHTML: `
+          <label class="btn-sm" style="display:block;margin-bottom:6px;">Link do YouTube</label>
+          <input class="btn-sm" id="modal-youtube-url" type="text" placeholder="https://www.youtube.com/watch?v=..." style="width:100%;height:38px;border:1px solid var(--color-stroke);border-radius:8px;background:var(--color-card);color:inherit;padding:0 10px;">
+          <p class="btn-sm" data-youtube-error style="margin-top:8px;color:#ff4d4f;display:none;">Insira um link válido do YouTube.</p>
+        `,
+        confirmText: "Inserir",
+        onConfirm: ({ modal, close }) => {
+          const input = modal.querySelector("#modal-youtube-url");
+          const errorMsg = modal.querySelector("[data-youtube-error]");
+          if (!input) {
+            close();
+            return;
+          }
+          const parsed = extractYoutubeVideoData(input.value);
+          if (!parsed) {
+            if (errorMsg) errorMsg.style.display = "block";
+            input.focus();
+            return;
+          }
+          if (errorMsg) errorMsg.style.display = "none";
+          const iframe = createYoutubeIframe(parsed.videoId, parsed.startAt);
+          if (!iframe) {
+            if (errorMsg) errorMsg.style.display = "block";
+            input.focus();
+            return;
+          }
+          const box = createResizableBox(iframe);
+          if (savedRange) {
+            const range =
+              typeof savedRange.cloneRange === "function"
+                ? savedRange.cloneRange()
+                : savedRange;
+            const selection = window.getSelection();
+            if (selection) {
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }
+          }
+          insertNodeAtCaret(box);
+          selectMediaBox(box);
+          close();
+        },
       });
+      setTimeout(() => {
+        const input = modal.querySelector("#modal-youtube-url");
+        const errorMsg = modal.querySelector("[data-youtube-error]");
+        if (input) {
+          input.focus();
+          input.addEventListener("input", () => {
+            if (errorMsg) errorMsg.style.display = "none";
+          });
+        }
+      }, 0);
     });
   }
 
