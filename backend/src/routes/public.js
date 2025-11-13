@@ -182,6 +182,15 @@ function isMemberActive(member) {
   return !member.deleted_at;
 }
 
+function buildJournalistProfileUrl(member) {
+  if (!member || member.id == null) return null;
+  const params = new URLSearchParams();
+  const displayName = (member.nome || member.name || "").trim();
+  params.set("name", displayName);
+  params.set("id", String(member.id));
+  return `/jornalista?${params.toString()}`;
+}
+
 function sanitizeMemberForPublic(member) {
   if (!member) return null;
   const active = isMemberActive(member);
@@ -211,10 +220,7 @@ function sanitizeMemberForPublic(member) {
     deleted_at: member.deleted_at || null,
     is_active: active ? 1 : 0,
     active,
-    profile_url:
-      member.id != null
-        ? `/jornalista?id=${encodeURIComponent(member.id)}`
-        : null,
+    profile_url: buildJournalistProfileUrl(member),
   };
 }
 
@@ -467,6 +473,37 @@ router.get("/journalists/:id", (req, res) => {
   } catch (error) {
     console.error("public-journalist", error);
     return res.status(500).json({ error: "Erro ao carregar jornalista" });
+  }
+});
+router.get("/journalist", (req, res) => {
+  const requestedName = String(req.query.name ?? "").trim();
+  const rawId = req.query.id ?? req.query.member_id;
+  const id = Number.parseInt(rawId, 10);
+  if (!Number.isInteger(id) || id <= 0) {
+    return res.status(400).json({ error: "ID inv�lido" });
+  }
+  try {
+    const details = MemberRepository.getDetails(id, { includeInactive: true });
+    if (!details) {
+      return res.status(404).json({ error: "Jornalista n�o encontrado" });
+    }
+    const payload = sanitizeMemberDetails(details);
+    if (payload?.member) {
+      payload.member.profile_url =
+        payload.member.profile_url || buildJournalistProfileUrl(payload.member);
+      payload.member.requested_name = requestedName;
+      if (requestedName) {
+        const storedName = String(payload.member.nome || "").trim();
+        payload.member.name_matches_request =
+          storedName.toLowerCase() === requestedName.toLowerCase();
+      }
+    }
+    return res.json(payload);
+  } catch (error) {
+    console.error("public-journalist-query", error);
+    return res
+      .status(500)
+      .json({ error: "Erro ao carregar jornalista (consulta)" });
   }
 });
 

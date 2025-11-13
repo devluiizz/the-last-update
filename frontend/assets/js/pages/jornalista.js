@@ -152,13 +152,27 @@ import { createShowingCounter } from "../utils/showingCounter.js";
    * Busca os detalhes de um membro a partir do ID.
    * @param {string|number} id
    */
-  async function fetchMemberDetails(id) {
+  async function fetchMemberDetails(id, options = {}) {
     const API = (window.__API_BASE__ || "/api").replace(/\/$/, "");
-    const url = `${API}/public/journalists/${encodeURIComponent(id)}`;
-    const res = await fetch(url, {
+    const params = new URLSearchParams();
+    params.set("id", String(id));
+    if (options.name) {
+      params.set("name", String(options.name));
+    }
+    const queryUrl = `${API}/public/journalist?${params.toString()}`;
+    const fetchConfig = {
       cache: "no-store",
       headers: { "cache-control": "no-cache" },
-    });
+    };
+    let res = await fetch(queryUrl, fetchConfig);
+    if (!res.ok) {
+      if (res.status === 404 || res.status === 400) {
+        const fallbackUrl = `${API}/public/journalists/${encodeURIComponent(
+          id
+        )}`;
+        res = await fetch(fallbackUrl, fetchConfig);
+      }
+    }
     if (!res.ok) throw new Error("Erro ao buscar dados do jornalista");
     return res.json();
   }
@@ -622,7 +636,7 @@ import { createShowingCounter } from "../utils/showingCounter.js";
     let memberDetails;
     try {
       if (id) {
-        memberDetails = await fetchMemberDetails(id);
+        memberDetails = await fetchMemberDetails(id, { name });
       } else if (name) {
         // Procura o membro pelo nome (case insensitive)
         const members = await fetchAllMembers();
@@ -633,7 +647,9 @@ import { createShowingCounter } from "../utils/showingCounter.js";
           );
         });
         if (target) {
-          memberDetails = await fetchMemberDetails(target.id);
+          memberDetails = await fetchMemberDetails(target.id, {
+            name: target.nome || target.name || name,
+          });
         }
       }
     } catch (err) {

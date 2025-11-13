@@ -35,22 +35,4 @@
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
   </url>
-  <url>
-    <loc>https://www.thelastupdate.com.br/noticia/o-universo-dos-quadrinhos-continua-a-conquistar-geracoes</loc>
-    <lastmod>2025-11-12T05:42:54.000Z</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.thelastupdate.com.br/noticia/intel-core-i5-8600k-o-classico-que-marcou-geracoes</loc>
-    <lastmod>2025-11-12T05:37:48.000Z</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.thelastupdate.com.br/noticia/sonic-the-hedgehog-2-um-classico-eterno-dos-videogames</loc>
-    <lastmod>2025-11-12T05:46:01.000Z</lastmod>
-    <changefreq>hourly</changefreq>
-    <priority>0.9</priority>
-  </url>
 </urlset>

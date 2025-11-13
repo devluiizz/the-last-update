@@ -199,12 +199,52 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerNav = document.querySelector(".header-nav");
   const navList = document.getElementById("header-menu-list");
   const mq = window.matchMedia("(max-width: 1280px)");
+  let submenuTrigger = document.querySelector(".submenu-btn");
+  let submenuPanel = document.querySelector(".submenu");
+  let submenuItem = submenuTrigger?.closest(".menu-item.has-submenu") || null;
+
+  const syncSubmenuHeight = () => {
+    if (!submenuPanel) return;
+    if (!mq.matches) {
+      submenuPanel.style.removeProperty("max-height");
+      submenuPanel.style.removeProperty("opacity");
+      submenuPanel.style.removeProperty("transform");
+      submenuPanel.style.removeProperty("pointer-events");
+      return;
+    }
+    const expanded = submenuItem?.classList.contains("is-open");
+    const readHeight = () => {
+      const prev = submenuPanel.style.maxHeight;
+      submenuPanel.style.maxHeight = "none";
+      const size = submenuPanel.scrollHeight;
+      submenuPanel.style.maxHeight = prev;
+      return size;
+    };
+    if (expanded) {
+      submenuPanel.style.maxHeight = `${readHeight()}px`;
+      submenuPanel.style.opacity = "1";
+      submenuPanel.style.transform = "translateY(0)";
+      submenuPanel.style.pointerEvents = "auto";
+    } else {
+      submenuPanel.style.maxHeight = "0px";
+      submenuPanel.style.opacity = "0";
+      submenuPanel.style.transform = "translateY(-8px)";
+      submenuPanel.style.pointerEvents = "none";
+    }
+  };
+
+  const closeMobileSubmenu = () => {
+    if (submenuItem) submenuItem.classList.remove("is-open");
+    if (submenuTrigger) submenuTrigger.setAttribute("aria-expanded", "false");
+    syncSubmenuHeight();
+  };
 
   const closeMenu = () => {
     if (!menuToggle || !headerNav) return;
     menuToggle.setAttribute("aria-expanded", "false");
     headerNav.classList.remove("header-nav--open");
     document.body.classList.remove("header-menu-open");
+    closeMobileSubmenu();
   };
 
   const openMenu = () => {
@@ -243,7 +283,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   const handleBreakpointChange = (event) => {
-    if (!event.matches) closeMenu();
+    if (!event.matches) {
+      closeMenu();
+    } else {
+      closeMobileSubmenu();
+    }
+    syncSubmenuHeight();
   };
 
   if (mq.addEventListener)
@@ -270,21 +315,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateMenuTop();
   window.addEventListener("resize", updateMenuTop);
+  window.addEventListener("resize", syncSubmenuHeight);
 
-  const trigger = document.querySelector(".submenu-btn");
-  const submenu = document.querySelector(".submenu");
-  trigger?.addEventListener("focus", () =>
-    trigger.setAttribute("aria-expanded", "true")
-  );
-  trigger?.addEventListener("blur", () =>
-    trigger.setAttribute("aria-expanded", "false")
-  );
-  submenu?.addEventListener("mouseenter", () =>
-    trigger.setAttribute("aria-expanded", "true")
-  );
-  submenu?.addEventListener("mouseleave", () =>
-    trigger.setAttribute("aria-expanded", "false")
-  );
+  closeMobileSubmenu();
+
+  const handleSubmenuToggle = (event) => {
+    if (!submenuTrigger || !submenuItem) return;
+    if (!mq.matches) return;
+    event.preventDefault();
+    const isOpen = submenuItem.classList.toggle("is-open");
+    submenuTrigger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    if (!isOpen) {
+      submenuTrigger.blur();
+    }
+    syncSubmenuHeight();
+  };
+
+  const setDesktopSubmenuState = (expanded) => {
+    if (!submenuTrigger) return;
+    if (mq.matches) return;
+    submenuTrigger.setAttribute("aria-expanded", expanded ? "true" : "false");
+  };
+
+  const initResponsiveSubmenu = () => {
+    const trigger = document.querySelector(".submenu-btn");
+    const item = trigger?.closest(".menu-item.has-submenu") || null;
+    const panel = item?.querySelector(".submenu") || null;
+    if (!trigger || !panel || !item) return false;
+
+    submenuTrigger = trigger;
+    submenuPanel = panel;
+    submenuItem = item;
+
+    if (!trigger.dataset.submenuReady) {
+      trigger.dataset.submenuReady = "true";
+      trigger.addEventListener("click", handleSubmenuToggle);
+      trigger.addEventListener("focus", () => setDesktopSubmenuState(true));
+      trigger.addEventListener("blur", () => setDesktopSubmenuState(false));
+      panel.addEventListener("mouseenter", () =>
+        setDesktopSubmenuState(true)
+      );
+      panel.addEventListener("mouseleave", () =>
+        setDesktopSubmenuState(false)
+      );
+    }
+
+    syncSubmenuHeight();
+    return true;
+  };
+
+  if (!initResponsiveSubmenu()) {
+    const observer = new MutationObserver(() => {
+      if (initResponsiveSubmenu()) observer.disconnect();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
 });
 
 (function () {
