@@ -2584,6 +2584,35 @@
         refreshStyleButtons();
       })
     );
+    editor.addEventListener("paste", (e) => {
+      if (!e) return;
+      e.preventDefault();
+      const clip = e.clipboardData || window.clipboardData;
+      const raw = clip ? clip.getData("text/plain") : "";
+      if (!raw) return;
+      focusEditor();
+      const normalized = raw.replace(/\r\n?/g, "\n");
+      const lines = normalized.split("\n");
+      lines.forEach((line, idx) => {
+        document.execCommand("insertText", false, line);
+        if (idx < lines.length - 1) {
+          document.execCommand("insertParagraph");
+        }
+      });
+      if (!isCaretInsideListItem()) {
+        const blk = getCurrentBlockNode();
+        if (!blk || blk.tagName !== "P") {
+          forceParagraphBlockFromSelection();
+        } else {
+          resetParagraphAppearance(blk);
+          cleanupInlineColorInParagraph(blk);
+        }
+      }
+      sweepParagraphColors();
+      syncSource();
+      updateWordCount();
+      refreshStyleButtons();
+    });
     editor.addEventListener("input", () => {
       updateWordCount();
       syncSource();
