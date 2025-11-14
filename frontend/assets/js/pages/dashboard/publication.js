@@ -257,6 +257,7 @@
           // Cliques não são mais contabilizados.
           cover: item.image || "",
           description: item.description || "",
+          imageCredit: item.image_credit || item.imageCredit || "",
           content: item.content || "",
         });
       });
@@ -296,6 +297,7 @@
           views: item.views,
           cover: item.image || "",
           description: item.description || "",
+          imageCredit: item.image_credit || item.imageCredit || "",
           content: item.content || "",
         });
       });
@@ -333,6 +335,7 @@
           views: item.views,
           cover: item.image || "",
           description: item.description || "",
+          imageCredit: item.image_credit || item.imageCredit || "",
           content: item.content || "",
           motivo_exclusao: item.motivo_exclusao ?? item.reason ?? "",
         });
@@ -1482,12 +1485,14 @@
     ? $("#pub-date", scope)
     : $("#pub-date", scope);
   const fldDesc = $("#pub-description", scope);
+  const fldImageCredits = $("#pub-image-credits", scope);
   const descCount = $("#desc-count", scope);
 
   let editMode = null;
   let editId = null;
 
   let currentBlockTag = (fmtBlock && fmtBlock.value) || "p";
+  let forceParagraphAfterHeading = false;
   let currentMediaBox = null;
   let draggingBox = null;
   function getCurrentBlockNode() {
@@ -1520,15 +1525,56 @@
       font.remove();
     });
   }
+  function resetParagraphAppearance(el) {
+    if (!el || !(el instanceof HTMLElement)) return;
+    const textAlign =
+      (el.style && el.style.textAlign) || el.getAttribute("align") || "";
+    if (el.hasAttribute("style")) {
+      el.style.removeProperty("font-size");
+      el.style.removeProperty("font-weight");
+      el.style.removeProperty("line-height");
+      el.style.removeProperty("letter-spacing");
+    }
+    el.removeAttribute("align");
+    if (el.hasAttribute("style")) {
+      const tempAlign = el.style.textAlign || "";
+      el.removeAttribute("style");
+      if (tempAlign) el.style.textAlign = tempAlign;
+    }
+    if (textAlign && (!el.style || !el.style.textAlign)) {
+      el.style.textAlign = textAlign;
+    }
+    cleanupInlineColorInParagraph(el);
+  }
+
+  function forceParagraphBlockFromSelection() {
+    focusEditor();
+    document.execCommand("styleWithCSS", false, false);
+    document.execCommand("formatBlock", false, "P");
+    const blk = getCurrentBlockNode();
+    if (blk && blk.tagName === "P") {
+      resetParagraphAppearance(blk);
+      cleanupInlineColorInParagraph(blk);
+    }
+    currentBlockTag = "p";
+    if (fmtBlock && fmtBlock.value !== "p") fmtBlock.value = "p";
+    syncSource();
+    refreshStyleButtons();
+  }
+
+  function isHeadingTag(tagName) {
+    if (!tagName) return false;
+    return /^(h1|h2|h3|h4)$/i.test(tagName);
+  }
+
   if (fmtBlock) {
     fmtBlock.addEventListener("change", () => {
       clearMediaSelection();
       currentBlockTag = fmtBlock.value || "p";
-      enforceCurrentBlock();
       if (currentBlockTag === "p") {
-        const blk = getCurrentBlockNode();
-        cleanupInlineColorInParagraph(blk);
-        syncSource();
+        forceParagraphBlockFromSelection();
+      } else {
+        enforceCurrentBlock();
       }
       focusEditor();
     });
@@ -1556,6 +1602,9 @@
     if (fldDesc) {
       fldDesc.value = "";
       if (descCount) descCount.textContent = "0";
+    }
+    if (fldImageCredits) {
+      fldImageCredits.value = "";
     }
     const tagSelect = $("#pub-tags", scope);
     if (tagSelect) tagSelect.selectedIndex = 0;
@@ -1585,6 +1634,9 @@
     if (fldDesc) {
       fldDesc.value = item.description || "";
       if (descCount) descCount.textContent = String(fldDesc.value.length);
+    }
+    if (fldImageCredits) {
+      fldImageCredits.value = item.imageCredit || "";
     }
     const tagSelect = $("#pub-tags", scope);
     if (tagSelect) {
@@ -1627,6 +1679,7 @@
     const dateStr = $("#pub-date", scope)?.value.trim() || "";
     const category = $("#pub-tags", scope)?.value || "";
     const description = fldDesc?.value || "";
+    const imageCredit = fldImageCredits?.value?.trim() || "";
     syncSource();
     const contentHtml = srcArea?.value || "";
     let dateISO = new Date().toISOString().split("T")[0];
@@ -1648,6 +1701,7 @@
       category,
       dateISO,
       description,
+      imageCredit,
       content: contentHtml,
       cover: selectedImageUrl || "",
       views: 0,
@@ -2345,12 +2399,6 @@
     });
   }
 
-  if (fmtBlock)
-    fmtBlock.addEventListener("change", () => {
-      currentBlockTag = fmtBlock.value || "p";
-      enforceCurrentBlock();
-    });
-
   if (btnBold) btnBold.addEventListener("click", () => applyExec("bold"));
   if (btnItalic) btnItalic.addEventListener("click", () => applyExec("italic"));
   if (btnUnder)
@@ -2495,8 +2543,13 @@
     editor.addEventListener("keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         if (!isCaretInsideListItem()) {
+          const blk = getCurrentBlockNode();
+          forceParagraphAfterHeading = blk
+            ? isHeadingTag(blk.tagName)
+            : false;
           setTimeout(enforceCurrentBlock, 0);
         } else {
+          forceParagraphAfterHeading = false;
           setTimeout(() => {
             syncSource();
             refreshStyleButtons();
@@ -2507,6 +2560,11 @@
     });
     editor.addEventListener("keyup", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
+        if (forceParagraphAfterHeading) {
+          forceParagraphAfterHeading = false;
+          forceParagraphBlockFromSelection();
+          sweepParagraphColors();
+        }
         reflectBlockFromCaret();
         if (isCaretInsideListItem()) {
           syncSource();
@@ -2576,8 +2634,12 @@
       if (fldDesc.value.length > 250)
         fldDesc.value = fldDesc.value.slice(0, 250);
       if (descCount) descCount.textContent = String(fldDesc.value.length);
+      updatePreview();
     };
     fldDesc.addEventListener("input", updateDesc);
+  }
+  if (fldImageCredits) {
+    fldImageCredits.addEventListener("input", () => updatePreview());
   }
 
   let previewIframe = null;
@@ -2616,6 +2678,12 @@
     const titleEl = doc.getElementById("article-title");
     const titleInput = $("#pub-title", scope);
     if (titleEl && titleInput) titleEl.textContent = titleInput.value || "";
+    const descEl = doc.getElementById("article-description");
+    if (descEl) {
+      const descValue = fldDesc?.value || "";
+      descEl.textContent = descValue;
+      descEl.hidden = !descValue.trim();
+    }
     const authorEl = doc.getElementById("author-name");
     const authorInput = $("#pub-author", scope);
     if (authorEl && authorInput) authorEl.textContent = authorInput.value || "";
@@ -2638,6 +2706,17 @@
     if (imgEl) {
       if (selectedImageUrl) imgEl.src = selectedImageUrl;
       else imgEl.removeAttribute("src");
+    }
+    const creditEl = doc.getElementById("article-image-credit");
+    if (creditEl) {
+      const creditText = fldImageCredits?.value?.trim() || "";
+      if (creditText) {
+        creditEl.textContent = `Créditos: ${creditText}`;
+        creditEl.hidden = false;
+      } else {
+        creditEl.textContent = "";
+        creditEl.hidden = true;
+      }
     }
     const contentEl = doc.getElementById("article-content");
     if (contentEl && editor) {
@@ -2744,6 +2823,7 @@
       category: formVals.category,
       description: formVals.description,
       image: formVals.cover || null,
+      image_credit: formVals.imageCredit || null,
       content: formVals.content,
       slug: formVals.slug || undefined, // <-- NOVO
       status: isAdminUser ? "published" : "review",
@@ -2818,6 +2898,7 @@
       category: formVals.category,
       description: formVals.description,
       image: formVals.cover || null,
+      image_credit: formVals.imageCredit || null,
       content: formVals.content,
       slug: formVals.slug || undefined, // <-- NOVO
       status: "draft",
@@ -2925,6 +3006,7 @@
       category: formVals.category,
       description: formVals.description,
       image: formVals.cover || null,
+      image_credit: formVals.imageCredit || null,
       content: formVals.content,
       slug: formVals.slug || undefined,
       status: "draft",
@@ -2966,6 +3048,11 @@
             views: resp.views ?? 0,
             cover: resp.image ?? "",
             description: resp.description ?? "",
+            imageCredit:
+              resp.image_credit ??
+              resp.imageCredit ??
+              formVals.imageCredit ??
+              "",
             content: resp.content ?? "",
           };
           if (idx >= 0) drafts[idx] = item;

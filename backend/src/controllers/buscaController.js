@@ -44,7 +44,7 @@ function searchPublications(req, res) {
   }
   // Monta SQL parametrizado usando LIKE com wildcard em ambas as extremidades
   const pattern = `%${q}%`;
-  let sql = `SELECT p.id, p.slug, p.title, p.category, p.date, p.image, p.content, m.nome AS author_name, m.id AS author_id, m.avatar_light AS author_avatar_light, m.avatar_dark AS author_avatar_dark
+  let sql = `SELECT p.id, p.slug, p.title, p.category, p.date, p.image, p.image_credit, p.content, m.nome AS author_name, m.id AS author_id, m.avatar_light AS author_avatar_light, m.avatar_dark AS author_avatar_dark
     FROM publications p
     JOIN members m ON p.author_id = m.id
     WHERE p.status = 'published' AND (p.title LIKE ? OR p.category LIKE ?)
@@ -63,6 +63,7 @@ function searchPublications(req, res) {
         category: row.category || "",
         date: row.date || "",
         image: row.image || null,
+        image_credit: row.image_credit || "",
         // Include full content for building excerpts and recalculating reading time when needed
         content: row.content || "",
         author: {

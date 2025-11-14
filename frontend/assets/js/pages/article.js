@@ -274,6 +274,17 @@ import { calcularTempoLeitura } from "../utils/calcularTempoLeitura.js";
 
       const titleEl = document.getElementById("article-title");
       if (titleEl) titleEl.textContent = item.title || "";
+      const descEl = document.getElementById("article-description");
+      if (descEl) {
+        const rawDesc = item?.description || "";
+        if (rawDesc && rawDesc.trim()) {
+          descEl.textContent = rawDesc;
+          descEl.hidden = false;
+        } else {
+          descEl.textContent = "";
+          descEl.hidden = true;
+        }
+      }
       const authorEl = document.getElementById("author-name");
       if (authorEl) {
         const authorName = item.author?.name || "";
@@ -353,6 +364,7 @@ import { calcularTempoLeitura } from "../utils/calcularTempoLeitura.js";
       renderArticleTime();
       const pictureEl = document.getElementById("article-picture");
       const imgEl = document.getElementById("article-image");
+      const imageCreditEl = document.getElementById("article-image-credit");
 
       if (imgEl) {
         if (featuredImage) {
@@ -360,6 +372,16 @@ import { calcularTempoLeitura } from "../utils/calcularTempoLeitura.js";
           imgEl.alt = item.title || "Imagem";
         } else {
           imgEl.removeAttribute("src");
+        }
+      }
+      if (imageCreditEl) {
+        const creditText = String(item.image_credit || "").trim();
+        if (creditText) {
+          imageCreditEl.textContent = `Créditos: ${creditText}`;
+          imageCreditEl.hidden = false;
+        } else {
+          imageCreditEl.textContent = "";
+          imageCreditEl.hidden = true;
         }
       }
       const contentEl = document.getElementById("article-content");

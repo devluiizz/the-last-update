@@ -18,6 +18,7 @@ function mapRow(row) {
     category: row.category,
     description: row.description,
     image: row.image,
+    image_credit: row.image_credit || null,
     content: row.content,
     status: row.status,
     views: row.views,
@@ -92,7 +93,7 @@ function syncHighlightFlags() {
 }
 const PublicationRepository = {
   list({ status, authorId } = {}) {
-    let sql = `SELECT p.id, p.slug, p.title, p.author_id, m.nome AS author_name, p.date, p.category, p.description, p.image, p.content, p.status, p.views, p.is_highlighted, p.visitas_unicas, p.motivo_exclusao, p.created_at, p.updated_at
+    let sql = `SELECT p.id, p.slug, p.title, p.author_id, m.nome AS author_name, p.date, p.category, p.description, p.image, p.image_credit, p.content, p.status, p.views, p.is_highlighted, p.visitas_unicas, p.motivo_exclusao, p.created_at, p.updated_at
        FROM publications p
        JOIN members m ON p.author_id = m.id`;
     const conditions = [];
@@ -115,7 +116,7 @@ const PublicationRepository = {
 
   findById(id) {
     const stmt = db.prepare(
-      `SELECT p.id, p.slug, p.title, p.author_id, m.nome AS author_name, p.date, p.category, p.description, p.image, p.content, p.status, p.views, p.is_highlighted, p.visitas_unicas, p.motivo_exclusao, p.created_at, p.updated_at
+      `SELECT p.id, p.slug, p.title, p.author_id, m.nome AS author_name, p.date, p.category, p.description, p.image, p.image_credit, p.content, p.status, p.views, p.is_highlighted, p.visitas_unicas, p.motivo_exclusao, p.created_at, p.updated_at
        FROM publications p
        JOIN members m ON p.author_id = m.id
        WHERE p.id = ?`
@@ -130,6 +131,7 @@ const PublicationRepository = {
     const category = String(payload.category || "").trim();
     const description = payload.description || "";
     const image = payload.image || null;
+    const imageCredit = payload.image_credit ?? payload.imageCredit ?? null;
     const content = payload.content || "";
     const status = payload.status || "draft";
     const views = Number(payload.views) || 0;
@@ -138,8 +140,8 @@ const PublicationRepository = {
       throw new Error("MISSING_FIELDS");
     }
     const stmt = db.prepare(
-      `INSERT INTO publications (title, author_id, date, category, description, image, content, status, views, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`
+      `INSERT INTO publications (title, author_id, date, category, description, image, image_credit, content, status, views, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`
     );
     const info = stmt.run(
       title,
@@ -148,6 +150,7 @@ const PublicationRepository = {
       category,
       description,
       image,
+      imageCredit,
       content,
       status,
       views
@@ -174,6 +177,8 @@ const PublicationRepository = {
     if (payload.description !== undefined)
       add("description", payload.description);
     if (payload.image !== undefined) add("image", payload.image);
+    if (payload.image_credit !== undefined || payload.imageCredit !== undefined)
+      add("image_credit", payload.image_credit ?? payload.imageCredit ?? null);
     if (payload.content !== undefined) add("content", payload.content);
     if (payload.author_id !== undefined || payload.authorId !== undefined) {
       const candidate = Number(payload.author_id ?? payload.authorId);
@@ -299,6 +304,7 @@ const PublicationRepository = {
            p.category,
            p.description,
            p.image,
+           p.image_credit,
            p.content,
            p.status,
            p.views,
@@ -320,7 +326,7 @@ const PublicationRepository = {
   listHighlights() {
     const rows = db
       .prepare(
-        `SELECT h.card_number, h.publication_id, p.id, p.slug, p.title, p.author_id, m.nome AS author_name, p.date, p.category, p.description, p.image, p.content, p.status, p.views, p.is_highlighted, p.visitas_unicas, p.created_at, p.updated_at
+        `SELECT h.card_number, h.publication_id, p.id, p.slug, p.title, p.author_id, m.nome AS author_name, p.date, p.category, p.description, p.image, p.image_credit, p.content, p.status, p.views, p.is_highlighted, p.visitas_unicas, p.created_at, p.updated_at
          FROM highlights h
          JOIN publications p ON h.publication_id = p.id
          JOIN members m ON p.author_id = m.id

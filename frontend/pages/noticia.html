@@ -84,9 +84,11 @@
 
 
     <div class="article">
-      <h3 class="article-title" id="article-title"></h3>
+      <div class="article-header">
+        <h3 class="article-title" id="article-title"></h3>
+        <p class="article-description" id="article-description" hidden></p>
 
-      <div class="article-infos">
+        <div class="article-infos">
         <div class="article-author">
           <p class="btn-sm article-author-infos"> <span class="article-author-writer">Escrito por:</span> <span class="article-author-name btn-second" data-field="authorName" id="author-name"></span></p>
         </div>
@@ -121,12 +123,14 @@
             </svg></button>
         </div>
       </div>
+      </div>
 
       <div class="article-divider"></div>
 
       <picture class="article-img-primary" id="article-picture">
         <img id="article-image" src="" alt="Imagem Principal">
       </picture>
+      <p class="article-image-credit" id="article-image-credit" hidden></p>
 
       <div class="article-divider"></div>
 

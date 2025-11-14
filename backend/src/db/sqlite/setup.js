@@ -27,6 +27,20 @@ function ensurePublicationReasonColumn() {
   } catch (e) {}
 }
 
+function ensurePublicationImageCreditColumn() {
+  try {
+    const rows = db.prepare("PRAGMA table_info('publications')").all();
+    const hasColumn = rows.some(
+      (r) => String(r.name).toLowerCase() === "image_credit"
+    );
+    if (!hasColumn) {
+      db.exec("ALTER TABLE publications ADD COLUMN image_credit TEXT");
+    }
+  } catch (e) {
+    console.error("ensurePublicationImageCreditColumn error:", e);
+  }
+}
+
 function ensureMigrations() {
   db.exec(`
     CREATE TABLE IF NOT EXISTS members (
@@ -65,6 +79,7 @@ function ensureMigrations() {
       category TEXT NOT NULL,
       description TEXT,
       image TEXT,
+      image_credit TEXT,
       content TEXT,
       status TEXT NOT NULL CHECK (status IN ('draft','review','published','excluded')),
       views INTEGER NOT NULL DEFAULT 0,
@@ -121,6 +136,7 @@ function ensureMigrations() {
     CREATE INDEX IF NOT EXISTS idx_push_subscriptions_active ON push_subscriptions(is_active);
   `);
   ensurePublicationReasonColumn();
+  ensurePublicationImageCreditColumn();
   ensureMemberExtraColumns();
   ensurePublicationStatusReview();
   ensurePublicationUniqueClicksColumns();
@@ -282,6 +298,7 @@ function ensurePublicationStatusReview() {
         category TEXT NOT NULL,
         description TEXT,
         image TEXT,
+        image_credit TEXT,
         content TEXT,
         status TEXT NOT NULL CHECK (status IN ('draft','review','published','excluded')),
         views INTEGER NOT NULL DEFAULT 0,
@@ -292,8 +309,8 @@ function ensurePublicationStatusReview() {
       );
     `);
     db.exec(`
-      INSERT INTO publications_new (id, title, author_id, date, category, description, image, content, status, views, created_at, updated_at, motivo_exclusao)
-      SELECT id, title, author_id, date, category, description, image, content, status, views, created_at, updated_at, motivo_exclusao
+      INSERT INTO publications_new (id, title, author_id, date, category, description, image, image_credit, content, status, views, created_at, updated_at, motivo_exclusao)
+      SELECT id, title, author_id, date, category, description, image, image_credit, content, status, views, created_at, updated_at, motivo_exclusao
       FROM publications;
     `);
     db.exec("DROP TABLE publications");
@@ -339,6 +356,7 @@ function ensurePublicationUniqueClicksColumns() {
             category TEXT NOT NULL,
             description TEXT,
             image TEXT,
+            image_credit TEXT,
             content TEXT,
             status TEXT NOT NULL CHECK (status IN ('draft','review','published','excluded')),
             views INTEGER NOT NULL DEFAULT 0,
@@ -352,8 +370,8 @@ function ensurePublicationUniqueClicksColumns() {
         `);
         // Copia dados existentes, ignorando a coluna de cliques
         db.exec(`
-          INSERT INTO publications_new (id, title, author_id, date, category, description, image, content, status, views, visitas_unicas, created_at, updated_at, motivo_exclusao, slug)
-          SELECT id, title, author_id, date, category, description, image, content, status, views, visitas_unicas, created_at, updated_at, motivo_exclusao, slug
+          INSERT INTO publications_new (id, title, author_id, date, category, description, image, image_credit, content, status, views, visitas_unicas, created_at, updated_at, motivo_exclusao, slug)
+          SELECT id, title, author_id, date, category, description, image, image_credit, content, status, views, visitas_unicas, created_at, updated_at, motivo_exclusao, slug
           FROM publications;
         `);
         db.exec('DROP TABLE publications');
