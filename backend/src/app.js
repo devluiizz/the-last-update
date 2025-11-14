@@ -72,10 +72,10 @@ const page = (p) => path.join(frontendDir, "pages", p);
 app.get("/", (_req, res) => res.sendFile(page("index.html")));
 app.get("/login", (_req, res) => res.sendFile(page("login.html")));
 app.get("/quemsomos", (_req, res) => res.sendFile(page("quemsomos.html")));
-app.get("/politicas", (_req, res) =>
+app.get("/politica-de-privacidade", (_req, res) =>
   res.sendFile(page("politica-de-privacidade.html"))
 );
-app.get("/condicoes", (_req, res) =>
+app.get("/condicoes-de-uso", (_req, res) =>
   res.sendFile(page("condicoes-de-uso.html"))
 );
 app.get("/dashboard", ensureDashboardSession, (_req, res) =>
