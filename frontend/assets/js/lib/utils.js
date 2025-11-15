@@ -5,71 +5,131 @@
   const DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
   const DATE_TIME_NO_TZ_RE =
     /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?$/;
+  const BRAZIL_TZ = "America/Sao_Paulo";
+  const MONTH_LABELS = [
+    "janeiro",
+    "fevereiro",
+    "março",
+    "abril",
+    "maio",
+    "junho",
+    "julho",
+    "agosto",
+    "setembro",
+    "outubro",
+    "novembro",
+    "dezembro",
+  ];
   const LONG_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
-    timeZone: "UTC",
+    timeZone: BRAZIL_TZ,
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
   const SHORT_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
-    timeZone: "UTC",
+    timeZone: BRAZIL_TZ,
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+  const BRAZIL_ISO_FORMATTER = new Intl.DateTimeFormat("en-CA", {
+    timeZone: BRAZIL_TZ,
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
   });
 
-  function parseISODatePreservingUTC(iso) {
-    if (!iso && iso !== 0) return null;
-    if (iso instanceof Date && !Number.isNaN(iso.getTime())) return iso;
+  function parsePublicationDate(input) {
+    if (!input && input !== 0) return null;
 
-    if (typeof iso === "number") {
-      const fromNumber = new Date(iso);
-      return Number.isNaN(fromNumber.getTime()) ? null : fromNumber;
+    if (input instanceof Date && !Number.isNaN(input.getTime())) {
+      return { type: "datetime", date: input };
     }
 
-    if (typeof iso !== "string") return null;
+    if (typeof input === "number") {
+      const fromNumber = new Date(input);
+      return Number.isNaN(fromNumber.getTime())
+        ? null
+        : { type: "datetime", date: fromNumber };
+    }
 
-    const value = iso.trim();
+    if (typeof input !== "string") return null;
+    const value = input.trim();
     if (!value) return null;
 
     let match = DATE_ONLY_RE.exec(value);
     if (match) {
       const [, year, month, day] = match;
-      return new Date(Date.UTC(Number(year), Number(month) - 1, Number(day)));
+      return {
+        type: "date-only",
+        year: Number(year),
+        month: Number(month),
+        day: Number(day),
+      };
     }
 
     match = DATE_TIME_NO_TZ_RE.exec(value);
     if (match) {
       const [, year, month, day, hour, minute, second = "0"] = match;
-      return new Date(
-        Date.UTC(
-          Number(year),
-          Number(month) - 1,
-          Number(day),
-          Number(hour),
-          Number(minute),
-          Number(second)
-        )
-      );
+      return {
+        type: "datetime",
+        date: new Date(
+          Date.UTC(
+            Number(year),
+            Number(month) - 1,
+            Number(day),
+            Number(hour),
+            Number(minute),
+            Number(second)
+          )
+        ),
+      };
     }
 
     const normalized = value.includes("T") ? value : value.replace(" ", "T");
     const parsed = new Date(normalized);
     if (Number.isNaN(parsed.getTime())) {
       const fallback = new Date(value);
-      return Number.isNaN(fallback.getTime()) ? null : fallback;
+      return Number.isNaN(fallback.getTime())
+        ? null
+        : { type: "datetime", date: fallback };
     }
-    return parsed;
+    return { type: "datetime", date: parsed };
+  }
+
+  function formatDateParts(parts, style) {
+    const dd = String(parts.day).padStart(2, "0");
+    const mm = String(parts.month).padStart(2, "0");
+    if (style === "short") {
+      return `${dd}/${mm}/${parts.year}`;
+    }
+    const monthLabel = MONTH_LABELS[parts.month - 1] || "";
+    return `${Number(parts.day)} de ${monthLabel} de ${parts.year}`;
+  }
+
+  function formatPublicationDate(value, opts) {
+    const parsed = parsePublicationDate(value);
+    if (!parsed) return value || "";
+    const style = (opts && opts.style) === "short" ? "short" : "long";
+    if (parsed.type === "date-only") {
+      return formatDateParts(parsed, style);
+    }
+    const formatter = style === "short" ? SHORT_FORMATTER : LONG_FORMATTER;
+    return formatter.format(parsed.date);
   }
 
   function formatDatePtBr(iso) {
-    const date = parseISODatePreservingUTC(iso);
-    return date ? LONG_FORMATTER.format(date) : iso || "";
+    return formatPublicationDate(iso, { style: "long" });
   }
 
   function formatDatePtBrShort(iso) {
-    const date = parseISODatePreservingUTC(iso);
-    return date ? SHORT_FORMATTER.format(date) : iso || "";
+    return formatPublicationDate(iso, { style: "short" });
+  }
+
+  function getBrazilDateISO(date) {
+    const base = date instanceof Date ? date : new Date();
+    if (Number.isNaN(base.getTime())) return "";
+    return BRAZIL_ISO_FORMATTER.format(base);
   }
 
   function clampToLines(el, maxLines = 3) {
@@ -276,8 +336,10 @@
     };
   })();
 
+  window.formatPublicationDate = formatPublicationDate;
   window.formatDatePtBr = formatDatePtBr;
   window.formatDatePtBrShort = formatDatePtBrShort;
+  window.getBrazilDateISO = getBrazilDateISO;
   window.clampToLines = clampToLines;
   window.appModal = modalController;
 })();

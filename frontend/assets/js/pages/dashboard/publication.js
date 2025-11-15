@@ -3,6 +3,66 @@
   const feedbackModal = window.appModal || null;
   const DEFAULT_DURATION = 3000;
   const ERROR_DURATION = 3000;
+  const ISO_DATE_ONLY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+  const BR_DATE_RE = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+
+  function getBrazilTodayISO() {
+    if (typeof window.getBrazilDateISO === "function") {
+      const iso = window.getBrazilDateISO(new Date());
+      if (iso) return iso;
+    }
+    const now = new Date();
+    return [
+      String(now.getFullYear()),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+    ].join("-");
+  }
+
+  function parseIsoDateParts(value) {
+    if (!value && value !== 0) return null;
+    if (typeof value === "string") {
+      const match = ISO_DATE_ONLY_RE.exec(value.trim());
+      if (match) {
+        return {
+          year: Number(match[1]),
+          month: Number(match[2]),
+          day: Number(match[3]),
+        };
+      }
+    }
+    const candidate = value instanceof Date ? value : new Date(value);
+    if (Number.isNaN(candidate.getTime())) return null;
+    return {
+      year: candidate.getFullYear(),
+      month: candidate.getMonth() + 1,
+      day: candidate.getDate(),
+    };
+  }
+
+  function formatDateForInput(value) {
+    try {
+      if (window.formatPublicationDate) {
+        const formatted = window.formatPublicationDate(value, {
+          style: "short",
+        });
+        if (formatted) return formatted;
+      }
+    } catch (_) {}
+    const parts = parseIsoDateParts(value);
+    if (!parts) return value || "";
+    return `${String(parts.day).padStart(2, "0")}/${String(
+      parts.month
+    ).padStart(2, "0")}/${parts.year}`;
+  }
+
+  function normalizeBrDateInput(value) {
+    if (typeof value !== "string") return "";
+    const match = BR_DATE_RE.exec(value.trim());
+    if (!match) return "";
+    const [, dd, mm, yyyy] = match;
+    return `${yyyy}-${mm}-${dd}`;
+  }
 
   const showLoadingModal = (message, duration) => {
     if (!feedbackModal) return;
@@ -348,51 +408,18 @@
   }
 
   const fmtDate = (iso) => {
-    if (typeof window.formatDatePtBrShort === "function") {
-      return window.formatDatePtBrShort(iso);
-    }
-    if (iso instanceof Date && !Number.isNaN(iso.getTime())) {
-      return [
-        String(iso.getUTCDate()).padStart(2, "0"),
-        String(iso.getUTCMonth() + 1).padStart(2, "0"),
-        String(iso.getUTCFullYear()),
-      ].join("/");
-    }
-    if (typeof iso === "number") {
-      const byTimestamp = new Date(iso);
-      if (!Number.isNaN(byTimestamp.getTime())) {
-        return [
-          String(byTimestamp.getUTCDate()).padStart(2, "0"),
-          String(byTimestamp.getUTCMonth() + 1).padStart(2, "0"),
-          String(byTimestamp.getUTCFullYear()),
-        ].join("/");
+    if (!iso && iso !== 0) return "";
+    try {
+      if (window.formatPublicationDate) {
+        const formatted = window.formatPublicationDate(iso, {
+          style: "short",
+        });
+        if (formatted) return formatted;
+      } else if (window.formatDatePtBrShort) {
+        return window.formatDatePtBrShort(iso);
       }
-      return "";
-    }
-    if (typeof iso !== "string") return "";
-    const value = iso.trim();
-    if (!value) return "";
-    let date;
-    let match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-    if (match) {
-      const [, y, m, d] = match;
-      date = new Date(Date.UTC(+y, +m - 1, +d));
-    } else {
-      match = /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?$/.exec(
-        value
-      );
-      if (match) {
-        const [, y, m, d, H, M, S = "0"] = match;
-        date = new Date(Date.UTC(+y, +m - 1, +d, +H, +M, +S));
-      } else {
-        date = new Date(value);
-      }
-    }
-    if (!date || Number.isNaN(date.getTime())) return value;
-    const dd = String(date.getUTCDate()).padStart(2, "0");
-    const mm = String(date.getUTCMonth() + 1).padStart(2, "0");
-    const yy = date.getUTCFullYear();
-    return `${dd}/${mm}/${yy}`;
+    } catch (_) {}
+    return formatDateForInput(iso);
   };
 
   const statusBadge = (s) =>
@@ -546,14 +573,15 @@
       ).length;
       els.kpiViews.textContent = String(countDeleted);
     }
-    const now = new Date();
+    const currentMonthRef = parseIsoDateParts(getBrazilTodayISO());
     if (els.kpiMonth)
       els.kpiMonth.textContent = String(
         filtered.filter((p) => {
-          const d = new Date(p.dateISO);
+          const d = parseIsoDateParts(p.dateISO);
+          if (!d || !currentMonthRef) return false;
           return (
-            d.getMonth() === now.getMonth() &&
-            d.getFullYear() === now.getFullYear()
+            d.month === currentMonthRef.month &&
+            d.year === currentMonthRef.year
           );
         }).length
       );
@@ -1582,10 +1610,7 @@
 
   function initEditorDefaults() {
     if (fldDate) {
-      const now = new Date();
-      fldDate.value = `${String(now.getDate()).padStart(2, "0")}/${String(
-        now.getMonth() + 1
-      ).padStart(2, "0")}/${now.getFullYear()}`;
+      fldDate.value = formatDateForInput(getBrazilTodayISO());
     }
     if (fldDesc && descCount)
       descCount.textContent = String(fldDesc.value.length);
@@ -1650,10 +1675,7 @@
     if (authorInput) authorInput.value = item.author || authorInput.value;
     const dateInput = $("#pub-date", scope);
     if (dateInput && item.dateISO) {
-      const d = new Date(item.dateISO);
-      dateInput.value = `${String(d.getDate()).padStart(2, "0")}/${String(
-        d.getMonth() + 1
-      ).padStart(2, "0")}/${d.getFullYear()}`;
+      dateInput.value = formatDateForInput(item.dateISO);
     }
     selectedImageUrl = item.cover || "";
     // When editing an existing publication, show its cover in the preview
@@ -1682,13 +1704,10 @@
     const imageCredit = fldImageCredits?.value?.trim() || "";
     syncSource();
     const contentHtml = srcArea?.value || "";
-    let dateISO = new Date().toISOString().split("T")[0];
+    let dateISO = getBrazilTodayISO();
     if (dateStr) {
-      const [dd, mm, yyyy] = dateStr.split("/");
-      if (dd && mm && yyyy) {
-        const d = new Date(`${yyyy}-${mm}-${dd}`);
-        if (!isNaN(d.getTime())) dateISO = d.toISOString().split("T")[0];
-      }
+      const normalized = normalizeBrDateInput(dateStr);
+      if (normalized) dateISO = normalized;
     }
     const id = existingId || "id" + Date.now();
     const slug = slugifyTitle(title); // <-- NOVO
@@ -2723,11 +2742,8 @@
       const dStr = dateInput.value || "";
       let iso = "";
       if (dStr) {
-        const parts = dStr.split("/");
-        if (parts.length === 3) {
-          const d = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-          if (!isNaN(d.getTime())) iso = d.toISOString().split("T")[0];
-        }
+        const normalized = normalizeBrDateInput(dStr);
+        if (normalized) iso = normalized;
       }
       if (iso) dateField.setAttribute("datetime", iso);
     }
@@ -3178,14 +3194,15 @@
       );
     if (draftEls.kpiOther)
       draftEls.kpiOther.textContent = String(filtered.length);
-    const now = new Date();
+    const draftMonthRef = parseIsoDateParts(getBrazilTodayISO());
     if (draftEls.kpiMonth)
       draftEls.kpiMonth.textContent = String(
         filtered.filter((p) => {
-          const d = new Date(p.dateISO);
+          const d = parseIsoDateParts(p.dateISO);
+          if (!d || !draftMonthRef) return false;
           return (
-            d.getMonth() === now.getMonth() &&
-            d.getFullYear() === now.getFullYear()
+            d.month === draftMonthRef.month &&
+            d.year === draftMonthRef.year
           );
         }).length
       );

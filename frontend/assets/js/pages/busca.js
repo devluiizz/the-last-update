@@ -108,17 +108,10 @@ function createCard(item) {
   const dateISO = item.date || "";
   let dateLabel = dateISO;
   try {
-    if (window.formatDatePtBr) {
+    if (window.formatPublicationDate) {
+      dateLabel = window.formatPublicationDate(dateISO, { style: "long" });
+    } else if (window.formatDatePtBr) {
       dateLabel = window.formatDatePtBr(dateISO);
-    } else if (dateISO) {
-      const d = new Date(dateISO);
-      if (!isNaN(d.getTime())) {
-        dateLabel = d.toLocaleDateString("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-        });
-      }
     }
   } catch (_) {}
 

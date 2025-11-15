@@ -33,15 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let dateLabel = "";
         const rawDate = item.date || "";
         try {
-          if (window.formatDatePtBrShort) {
+          if (window.formatPublicationDate) {
+            dateLabel = window.formatPublicationDate(rawDate, {
+              style: "short",
+            });
+          } else if (window.formatDatePtBrShort) {
             dateLabel = window.formatDatePtBrShort(rawDate);
-          } else if (rawDate) {
-            const d = new Date(rawDate);
-            if (!isNaN(d.getTime())) {
-              dateLabel = d.toLocaleDateString("pt-BR");
-            } else {
-              dateLabel = rawDate;
-            }
+          } else {
+            dateLabel = rawDate;
           }
         } catch (_) {
           dateLabel = rawDate;
@@ -489,16 +488,15 @@ document.addEventListener("DOMContentLoaded", () => {
           let dateLabel = "";
           const rawDate = item.date || "";
           try {
-            if (window.formatDatePtBrShort) {
-              dateLabel = window.formatDatePtBrShort(rawDate);
-            } else if (rawDate) {
-              const d = new Date(rawDate);
-              if (!isNaN(d.getTime())) {
-                dateLabel = d.toLocaleDateString("pt-BR");
-              } else {
+              if (window.formatPublicationDate) {
+                dateLabel = window.formatPublicationDate(rawDate, {
+                  style: "short",
+                });
+              } else if (window.formatDatePtBrShort) {
+                dateLabel = window.formatDatePtBrShort(rawDate);
+              } else if (rawDate) {
                 dateLabel = rawDate;
               }
-            }
           } catch (_) {
             dateLabel = rawDate;
           }
